@@ -20,11 +20,16 @@ module  color_mapper ( input logic is_player,
                        output logic [7:0] VGA_R, VGA_G, VGA_B // VGA RGB output
                      );
     
+//parameter [7:0][2:0][3:0] palette = {{8'hff,8'h00,8'hff},{8'h2d,8'h2d,8'h0c},{8'h28,8'h28,8'h07},{8'h20,8'h20,8'h00}};
+	 
+parameter [1:0][23:0] palette = {24'hff00ff,24'h2d2d0c,24'h282807,24'h202000};
+//logic [23:0] palette [4];
+//assign palette[0]=24'hff00ff;
+//assign palette[1]=24'h2d2d0c;
+//assign palette[2]=24'h282807;
+//assign palette[3]=24'h202000;
+	 
     logic [7:0] Red, Green, Blue;
-    
-    logic [7:0] palette[3][256]={
-        {8'hff,8'h00,8'hff},{8'h2d,8'h2d,8'h0c},{8'h28,8'h28,8'h07},{8'h20,8'h20,8'h00}
-    };
 
     // Output colors to VGA
     assign VGA_R = Red;
@@ -42,9 +47,9 @@ module  color_mapper ( input logic is_player,
         end
         else 
         begin
-            Red = palette[bgColor][0];
-            Green = palette[bgColor][1];
-            Blue = palette[bgColor][2];
+            Red = palette[bgColor[1:0]][23:16];
+            Green = palette[bgColor[1:0]][15:8];
+            Blue = palette[bgColor[1:0]][7:0];
         end
     end 
     
