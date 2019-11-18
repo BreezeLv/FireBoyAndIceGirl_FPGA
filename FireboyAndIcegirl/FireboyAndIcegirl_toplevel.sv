@@ -114,10 +114,13 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     // TODO: Fill in the connections for the rest of the modules 
     VGA_controller vga_controller_instance(.*, .Reset(Reset_h));
     
-    // Which signal should be frame_clk?
     ball ball_instance(.*, .Reset(Reset_h), .frame_clk(~VGA_VS));
+
+    logic [7:0] bg_data;
+    bgController bgCtl_inst(.*);
+
     
-    color_mapper color_instance(.*);
+    color_mapper color_instance(.*, .is_player(1'b0), .bgColor(bg_data));
     
     // Display keycode on hex display
     HexDriver hex_inst_0 (keycode[3:0], HEX0);
