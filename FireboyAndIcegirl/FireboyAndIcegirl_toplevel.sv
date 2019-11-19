@@ -116,11 +116,17 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     
     ball ball_instance(.*, .Reset(Reset_h), .frame_clk(~VGA_VS));
 
+    // Control signals
+    logic revive;
+    GameController GameController_inst(.*, .Reset(Reset_h), .gameover(1'b0), .gamewin(1'b0));
+
     logic [7:0] bg_data;
     bgController bgCtl_inst(.*);
-
+    logic is_fireboy;
+    logic [7:0] fireboy_data;
+    FireBoy FireBoy_inst(.*, .frame_clk(~VGA_VS));
     
-    color_mapper color_instance(.*, .is_player(1'b0), .bgColor(bg_data));
+    color_mapper color_instance(.*, .bgColor(bg_data));
     
     // Display keycode on hex display
     HexDriver hex_inst_0 (bg_data[3:0], HEX0);

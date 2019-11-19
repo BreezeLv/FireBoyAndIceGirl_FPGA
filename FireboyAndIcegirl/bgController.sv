@@ -6,8 +6,8 @@ module bgController (
 );
 
 // Background(Wall) parameters
-parameter [9:0] bg_wall_width = 48;
-parameter [9:0] bg_wall_height = 18;
+parameter [9:0] bg_wall_width = 96;
+parameter [9:0] bg_wall_height = 32;
 
 logic [18:0] bg_read_addr;
 
@@ -26,7 +26,7 @@ module bgROM
 	output logic [7:0] bg_data_out
 );
 
-logic [7:0] mem_bg [0:863];
+logic [7:0] mem_bg [0:3071];
 
 initial
 begin
