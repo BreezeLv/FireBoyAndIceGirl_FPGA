@@ -584,4 +584,6 @@ set_location_assignment PIN_G4 -to OTG_DATA[15]
 set_location_assignment PIN_C14 -to ENET0_LINK100
 set_location_assignment PIN_D13 -to ENET1_LINK100
 set_location_assignment PIN_A14 -to ENETCLK_25
+set_global_assignment -name SYSTEMVERILOG_FILE GameController.sv
+set_global_assignment -name SYSTEMVERILOG_FILE playerController.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

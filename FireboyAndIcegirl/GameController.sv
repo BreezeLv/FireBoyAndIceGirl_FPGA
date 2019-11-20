@@ -25,7 +25,7 @@ always_comb begin
             else if(gamewin) next_state = GamePass;
         // GameOver: next_state = StartMenu;
         // GamePass: next_state = StartMenu;
-        default:
+        default: ;
     endcase
 end
 
@@ -34,7 +34,7 @@ always_comb begin
 
     unique case(state)
         GameStart: revive=1'b1;
-        default:
+        default: ;
     endcase
 end
 
