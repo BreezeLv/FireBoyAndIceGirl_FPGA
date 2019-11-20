@@ -49,7 +49,7 @@ begin
         fireboy_X_Motion <= 10'd0;
         fireboy_Y_Motion <= 10'd0;
         frame_index <= 2'b00;
-		  frame_counter <= 2'b00;
+        frame_counter <= 2'b00;
     end
     else
     begin
@@ -58,7 +58,7 @@ begin
         fireboy_X_Motion <= fireboy_X_Motion_in;
         fireboy_Y_Motion <= fireboy_Y_Motion_in;
         frame_index <= frame_index_in;
-		  frame_counter <= frame_counter_in;
+        frame_counter <= frame_counter_in;
     end
 end
 
@@ -96,9 +96,9 @@ begin
 		  
 		  
 		  // Animation logics
-		  frame_counter_in = frame_counter+2'd1;
+		  frame_counter_in = frame_counter+2'd1; //increment frame counter every frame
 		  if(frame_counter == 2'd3) begin
-				frame_counter_in = 2'd0;
+                frame_counter_in = 2'd0;
 				frame_index_in = (frame_index+2'b01)%fireboy_idle_frame_size;
 		  end
 		  
