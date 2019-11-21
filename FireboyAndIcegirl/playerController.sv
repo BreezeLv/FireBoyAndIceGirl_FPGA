@@ -1,3 +1,7 @@
+typedef enum logic [1:0] {
+    Idle, Run, Jump, Fall
+} anim_type_enum;
+
 module FireBoy (
 	input Clk, frame_clk, revive,
 	input [7:0] keycode,
@@ -10,10 +14,10 @@ module FireBoy (
 // Fireboy parameters
 parameter [9:0] fireboy_width = 32;
 parameter [9:0] fireboy_height = 48;
-parameter [9:0] fireboy_X_Min = 10'd0;       // Leftmost point on the X axis
-parameter [9:0] fireboy_X_Max = 10'd639;     // Rightmost point on the X axis
-parameter [9:0] fireboy_Y_Min = 10'd0;       // Topmost point on the Y axis
-parameter [9:0] fireboy_Y_Max = 10'd479;     // Bottommost point on the Y axis
+integer         fireboy_X_Min = 0;       // Leftmost point on the X axis
+integer         fireboy_X_Max = 639;     // Rightmost point on the X axis
+integer         fireboy_Y_Min = 0;       // Topmost point on the Y axis
+integer         fireboy_Y_Max = 479;     // Bottommost point on the Y axis
 parameter [9:0] fireboy_start_pos_X = 10'd32;
 parameter [9:0] fireboy_start_pos_Y = 10'd416;
 parameter [9:0] fireboy_max_velocity_X = 10'd2;
@@ -21,19 +25,17 @@ parameter [9:0] fireboy_max_velocity_X = 10'd2;
 parameter [9:0] fireboy_max_jump_height = 10'd120;
 parameter [9:0] fireboy_gravity = 10'd10;
 
-parameter [2:0] fireboy_idle_frame_size = 2'd4;
+parameter [2:0] fireboy_idle_frame_size = 3'd4;
 parameter [1:0] fireboy_idle_frame_duration = 2'd3;
 
 // movement variables
-logic [9:0] fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
-logic [9:0] fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
+integer fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
+integer fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
 
 //animation variables
 logic [2:0] frame_index, frame_index_in;
 logic [1:0] frame_counter, frame_counter_in; // for partially slow the frame rate
-enum logic [1:0] {
-    Idle, Run, Jump, Fall
-} anim_type, anim_type_in;
+anim_type_enum anim_type, anim_type_in;
 
 // Detect rising edge of frame_clk
 logic frame_clk_delayed, frame_clk_rising_edge;
@@ -49,8 +51,8 @@ begin
     begin
         fireboy_X_Pos <= fireboy_start_pos_X;
         fireboy_Y_Pos <= fireboy_start_pos_Y;
-        fireboy_X_Motion <= 10'd0;
-        fireboy_Y_Motion <= 10'd0;
+        fireboy_X_Motion <= 0;
+        fireboy_Y_Motion <= 0;
         frame_index <= 3'b00;
         frame_counter <= 2'b00;
         anim_type <= Idle;
@@ -72,7 +74,7 @@ begin
     // By default, keep motion and position unchanged
     fireboy_X_Pos_in = fireboy_X_Pos;
     fireboy_Y_Pos_in = fireboy_Y_Pos;
-    fireboy_X_Motion_in = fireboy_X_Motion;
+    fireboy_X_Motion_in = 32'b0;
     fireboy_Y_Motion_in = fireboy_Y_Motion;
 	 
 	frame_index_in = frame_index;
@@ -84,6 +86,7 @@ begin
     // else if(keycode == 8'h16) begin fireboy_Y_Motion_in = Ball_Y_Step; end
     if(keycode == 8'h04) begin fireboy_X_Motion_in = (~(fireboy_max_velocity_X) + 1'b1); end
     else if(keycode == 8'h07) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
+//	 else begin fireboy_Y_Motion_in = 0; end
 
     // Update position and motion only at rising edge of frame clock
     if (frame_clk_rising_edge)
@@ -104,10 +107,10 @@ begin
         fireboy_Y_Pos_in = fireboy_Y_Pos + fireboy_Y_Motion_in;
 		
         // Bound the fireboy pos to be stayed in frame
-        if(fireboy_X_Pos_in < fireboy_X_Min) fireboy_X_Pos_in=10'b0;
-        else if(fireboy_X_Pos_in + fireboy_width >= fireboy_X_Max) fireboy_X_Pos_in=fireboy_X_Max-10'b01;
-        if(fireboy_Y_Pos_in < fireboy_Y_Min) fireboy_Y_Pos_in=10'b0;
-        else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) fireboy_Y_Pos_in=fireboy_Y_Max-10'b01;
+        if(fireboy_X_Pos_in < fireboy_X_Min) fireboy_X_Pos_in=0;
+        else if(fireboy_X_Pos_in + fireboy_width >= fireboy_X_Max) fireboy_X_Pos_in=fireboy_X_Max-fireboy_width-1;
+        if(fireboy_Y_Pos_in < fireboy_Y_Min) fireboy_Y_Pos_in=0;
+        else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1;
 		
 
         /* ---- Animation Logics ---- */
@@ -119,9 +122,10 @@ begin
         // Update Animation Type
         if(fireboy_Y_Motion_in > 0) anim_type_in = Jump;
         else if(fireboy_Y_Motion_in < 0) anim_type_in = Fall;
-        else if(fireboy_X_Motion_in != 0) anim_type_in = Run;
+        else if(fireboy_X_Motion_in != 32'b0) anim_type_in = Run;
+		  else anim_type_in = Idle;
         // Overwrite/Reset Frame Index if switch Animation Type
-        if(anim_type_in != anim_type) begin frame_index_in=2'd0; frame_counter_in=2'd0 end
+        if(anim_type_in != anim_type) begin frame_index_in=3'd0; frame_counter_in=2'd0; end
 
     end
 
@@ -155,7 +159,8 @@ module fireboyROM
 (
 	input [18:0] fireboy_read_addr,
 	input Clk,
-    input logic [1:0] frame_index, anim_type,
+    input logic [2:0] frame_index, 
+	 input anim_type_enum anim_type,
 
 	output logic [7:0] fireboy_data_out
 );
@@ -189,18 +194,18 @@ always_comb begin
     case(anim_type)
         Run: begin
             case(frame_index)
-                2'd1: mem_content = mem_run_1[fireboy_read_addr];
-                2'd2: mem_content = mem_run_2[fireboy_read_addr];
-                2'd3: mem_content = mem_run_3[fireboy_read_addr];
+                3'd1: mem_content = mem_run_1[fireboy_read_addr];
+                3'd2: mem_content = mem_run_2[fireboy_read_addr];
+                3'd3: mem_content = mem_run_3[fireboy_read_addr];
                 default: mem_content = mem_run_0[fireboy_read_addr];
             endcase
         end
 
         default: begin
             case(frame_index)
-                2'd1: mem_content = mem_idle_1[fireboy_read_addr];
-                2'd2: mem_content = mem_idle_2[fireboy_read_addr];
-                2'd3: mem_content = mem_idle_3[fireboy_read_addr];
+                3'd1: mem_content = mem_idle_1[fireboy_read_addr];
+                3'd2: mem_content = mem_idle_2[fireboy_read_addr];
+                3'd3: mem_content = mem_idle_3[fireboy_read_addr];
                 default: mem_content = mem_idle_0[fireboy_read_addr];
             endcase
         end
