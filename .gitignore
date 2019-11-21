@@ -48,3 +48,6 @@ greybox_tmp
 *example*
 *sopc_*
 # PLLJ_PLLSPE_INFO.txt # The generated PLL specification file
+
+# software folder bypass
+!*/software/
