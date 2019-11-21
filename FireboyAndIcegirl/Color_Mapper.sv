@@ -38,6 +38,22 @@ assign palette[12] = 24'hCE0000;
 assign palette[13] = 24'h8F5600;
 assign palette[14] = 24'h4F2F00;
 assign palette[15] = 24'h6F5B00;
+assign palette[16] = 24'h726833;
+assign palette[17] = 24'h625B2C;
+assign palette[18] = 24'h017500;
+assign palette[19] = 24'h463D31;
+assign palette[20] = 24'h3C4E29;
+assign palette[21] = 24'h2E7E84;
+assign palette[22] = 24'h447E7A;
+assign palette[23] = 24'h298E01;
+assign palette[24] = 24'h34CE00;
+assign palette[25] = 24'h008001;
+assign palette[26] = 24'h009901;
+assign palette[27] = 24'h9F4B2F;
+assign palette[28] = 24'h4FC07E;
+assign palette[29] = 24'h6D97A4;
+assign palette[30] = 24'hACAC9F;
+assign palette[31] = 24'h3F4223;
 	 
     logic [7:0] Red, Green, Blue;
 

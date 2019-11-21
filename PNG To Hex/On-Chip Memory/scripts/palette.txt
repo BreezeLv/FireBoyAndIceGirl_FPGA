@@ -1,7 +1,7 @@
 # transparent
 00: FF00FF
 
-# Background
+# Background Brick
 01: 2D2D0C
 02: 282807
 03: 202000
@@ -13,9 +13,27 @@
 07: FF0000
 08: FFD400
 09: FF9800
-0a: FF3300
-0b: F73C04
-0c: CE0000
-0d: 8F5600
-0e: 4F2F00
-0f: 6F5B00
+10: FF3300
+11: F73C04
+12: CE0000
+13: 8F5600
+14: 4F2F00
+15: 6F5B00
+
+# Background Misc
+16: 726833 :Floor Brick
+17: 625B2C
+18: 017500 :Bg Decorator
+19: 463D31
+20: 3C4E29
+21: 2E7E84 :watergirl may use
+22: 447E7A :watergirl may use
+23: 298E01 :Green water trap
+24: 34CE00
+25: 008001 :Upper-Screen UI
+26: 009901
+27: 9F4B2F :Exit Door
+28: 4FC07E
+29: 6D97A4
+30: ACAC9F :Particle
+31: 3F4223
