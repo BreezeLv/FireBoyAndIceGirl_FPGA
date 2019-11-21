@@ -21,7 +21,7 @@ module  color_mapper ( input logic is_fireboy,
                      );
 	 
 // parameter [3:0][23:0] palette = {24'hff00ff,24'h2d2d0c,24'h282807,24'h202000};
-logic [23:0] palette [16];
+logic [23:0] palette [32];
 assign palette[0] = 24'hFF00FF;
 assign palette[1] = 24'h2D2D0C;
 assign palette[2] = 24'h282807;
@@ -66,15 +66,15 @@ assign palette[31] = 24'h3F4223;
     begin
         if (is_fireboy && fireboy_data != 8'b00) 
         begin
-            Red = palette[fireboy_data[3:0]][23:16];
-            Green = palette[fireboy_data[3:0]][15:8];
-            Blue = palette[fireboy_data[3:0]][7:0];
+            Red = palette[fireboy_data[4:0]][23:16];
+            Green = palette[fireboy_data[4:0]][15:8];
+            Blue = palette[fireboy_data[4:0]][7:0];
         end
         else 
         begin
-            Red = palette[bgColor[3:0]][23:16];
-            Green = palette[bgColor[3:0]][15:8];
-            Blue = palette[bgColor[3:0]][7:0];
+            Red = palette[bgColor[4:0]][23:16];
+            Green = palette[bgColor[4:0]][15:8];
+            Blue = palette[bgColor[4:0]][7:0];
         end
     end 
     
