@@ -148,7 +148,6 @@ end
 // Sprite Data Processing
 logic [18:0] fireboy_read_addr;
 assign fireboy_read_addr = is_fireboy ? offset_X + offset_Y*fireboy_width : 19'b00;
-// assign fireboy_read_addr = is_fireboy ? (fireboy_X_Motion_in<0 ? (fireboy_width-offset_X) + offset_Y*fireboy_width : offset_X + offset_Y*fireboy_width) : 19'b00;
 fireboyROM fireboyROM_inst(.*, .frame_index(frame_index), .fireboy_data_out(fireboy_data));
 	
 endmodule
@@ -160,7 +159,7 @@ module fireboyROM
 	input [18:0] fireboy_read_addr,
 	input Clk,
     input logic [2:0] frame_index, 
-	 input anim_type_enum anim_type,
+    input anim_type_enum anim_type,
 
 	output logic [7:0] fireboy_data_out
 );
