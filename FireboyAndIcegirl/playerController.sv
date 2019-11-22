@@ -22,8 +22,8 @@ parameter [9:0] fireboy_start_pos_X = 10'd32;
 parameter [9:0] fireboy_start_pos_Y = 10'd416;
 parameter [9:0] fireboy_max_velocity_X = 10'd2;
 
-parameter [9:0] fireboy_max_jump_height = 10'd120;
-parameter [9:0] fireboy_gravity = 10'd10;
+parameter integer fireboy_jump_v0 = -40; //initial velocity
+parameter integer fireboy_gravity = 10;
 
 parameter [2:0] fireboy_idle_frame_size = 3'd4;
 parameter [1:0] fireboy_idle_frame_duration = 2'd3;
@@ -31,6 +31,9 @@ parameter [1:0] fireboy_idle_frame_duration = 2'd3;
 // movement variables
 integer fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
 integer fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
+
+// jump variables
+logic is_grounded;
 
 //animation variables
 logic [2:0] frame_index, frame_index_in;
@@ -56,6 +59,7 @@ begin
         frame_index <= 3'b00;
         frame_counter <= 2'b00;
         anim_type <= Idle;
+        is_grounded <= 1'b1;
     end
     else
     begin
@@ -82,8 +86,7 @@ begin
     anim_type_in = anim_type;
 
     //keybaord interrput
-    // if(keycode == 8'h1a) begin fireboy_Y_Motion_in = (~(Ball_Y_Step) + 1'b1); end
-    // else if(keycode == 8'h16) begin fireboy_Y_Motion_in = Ball_Y_Step; end
+    // if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded=1'b0; end //Jump
     if(keycode == 8'h04) begin fireboy_X_Motion_in = (~(fireboy_max_velocity_X) + 1'b1); end
     else if(keycode == 8'h07) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
 //	 else begin fireboy_Y_Motion_in = 0; end
@@ -93,14 +96,12 @@ begin
     begin
 
         /* ---- Player Movement Logics ---- */
-
-        // Be careful when using comparators with "logic" datatype because compiler treats 
-        //   both sides of the operator as UNSIGNED numbers.
-        // Bound the fireboy pos to be stayed in frame
-        // if( fireboy_Y_Pos + fireboy_height >= fireboy_Y_Max && fireboy_Y_Motion_in>0) fireboy_Y_Motion_in = 10'b0;
-        // else if ( fireboy_Y_Pos <= fireboy_Y_Min && fireboy_Y_Motion_in<0) fireboy_Y_Motion_in = 10'b0;
-        // if( fireboy_X_Pos + fireboy_width >= fireboy_X_Max && fireboy_X_Motion_in>0) fireboy_X_Motion_in = 10'b0; 
-        // else if ( fireboy_X_Pos <= fireboy_X_Min && fireboy_X_Motion_in<0) fireboy_X_Motion_in = 10'b0;
+        // Jump
+        // make fireboy always pulling by gravity, and falling as much as possible
+        // (think about the case when fireboy falling from an edge of a platform..)
+        fireboy_Y_Motion_in = fireboy_Y_Motion + fireboy_gravity;
+        if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded=1'b0; end
+        
     
         // Update the ball's position with its motion
         fireboy_X_Pos_in = fireboy_X_Pos + fireboy_X_Motion_in;
@@ -109,9 +110,22 @@ begin
         // Bound the fireboy pos to be stayed in frame
         if(fireboy_X_Pos_in < fireboy_X_Min) fireboy_X_Pos_in=0;
         else if(fireboy_X_Pos_in + fireboy_width >= fireboy_X_Max) fireboy_X_Pos_in=fireboy_X_Max-fireboy_width-1;
-        if(fireboy_Y_Pos_in < fireboy_Y_Min) fireboy_Y_Pos_in=0;
-        else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1;
+        if(fireboy_Y_Pos_in < fireboy_Y_Min) begin fireboy_Y_Pos_in=0; fireboy_Y_Motion_in=0; end //jump touch the ceiling
+        else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) begin fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1; is_grounded=1'b1; fireboy_Y_Motion_in=0; end // fall to the floor
 		
+        // // TODO: Collison Detection
+        // if(new_pos/pos_in is going to collide) begin
+        //     new_pos/pos_in = pos of surface of that colission;
+        //     if(fireboy_Y_Motion_in<0) begin 
+        //         //case touch the ceiling
+        //         fireboy_Y_Motion_in=0;
+        //     end
+        //     else begin 
+        //         //case fall onto the floor
+        //         is_grounded=1'b1;
+        //         fireboy_Y_Motion_in=0;
+        //     end
+        // end
 
         /* ---- Animation Logics ---- */
         frame_counter_in = frame_counter+2'd1; //increment frame counter every frame
