@@ -111,10 +111,8 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     // You will have to generate it on your own in simulation.
     vga_clk vga_clk_instance(.inclk0(Clk), .c0(VGA_CLK));
     
-    // TODO: Fill in the connections for the rest of the modules 
+    // VGA controller instantiation
     VGA_controller vga_controller_instance(.*, .Reset(Reset_h));
-    
-    ball ball_instance(.*, .Reset(Reset_h), .frame_clk(~VGA_VS));
 
     // Control signals
     logic revive;

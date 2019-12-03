@@ -22,8 +22,8 @@ parameter [9:0] fireboy_start_pos_X = 10'd32;
 parameter [9:0] fireboy_start_pos_Y = 10'd416;
 parameter [9:0] fireboy_max_velocity_X = 10'd2;
 
-parameter integer fireboy_jump_v0 = -40; //initial velocity
-parameter integer fireboy_gravity = 10;
+parameter integer fireboy_jump_v0 = -7; //initial velocity
+parameter integer fireboy_gravity = 1;
 
 parameter [2:0] fireboy_idle_frame_size = 3'd4;
 parameter [1:0] fireboy_idle_frame_duration = 2'd3;
@@ -33,7 +33,7 @@ integer fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
 integer fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
 
 // jump variables
-logic is_grounded;
+logic is_grounded, is_grounded_in;
 
 //animation variables
 logic [2:0] frame_index, frame_index_in;
@@ -70,6 +70,7 @@ begin
         frame_index <= frame_index_in;
         frame_counter <= frame_counter_in;
         anim_type <= anim_type_in;
+		  is_grounded <= is_grounded_in;
     end
 end
 
@@ -84,6 +85,7 @@ begin
 	frame_index_in = frame_index;
 	frame_counter_in = frame_counter;
     anim_type_in = anim_type;
+	 is_grounded_in = is_grounded;
 
     //keybaord interrput
     // if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded=1'b0; end //Jump
@@ -99,8 +101,10 @@ begin
         // Jump
         // make fireboy always pulling by gravity, and falling as much as possible
         // (think about the case when fireboy falling from an edge of a platform..)
-        fireboy_Y_Motion_in = fireboy_Y_Motion + fireboy_gravity;
-        if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded=1'b0; end
+		  if(frame_counter == 2'd3) begin
+				fireboy_Y_Motion_in = fireboy_Y_Motion + fireboy_gravity; // add a divisor to gravitiy..
+		  end
+        if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded_in=1'b0; end
         
     
         // Update the ball's position with its motion
@@ -111,7 +115,7 @@ begin
         if(fireboy_X_Pos_in < fireboy_X_Min) fireboy_X_Pos_in=0;
         else if(fireboy_X_Pos_in + fireboy_width >= fireboy_X_Max) fireboy_X_Pos_in=fireboy_X_Max-fireboy_width-1;
         if(fireboy_Y_Pos_in < fireboy_Y_Min) begin fireboy_Y_Pos_in=0; fireboy_Y_Motion_in=0; end //jump touch the ceiling
-        else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) begin fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1; is_grounded=1'b1; fireboy_Y_Motion_in=0; end // fall to the floor
+        else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) begin fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1; is_grounded_in=1'b1; fireboy_Y_Motion_in=0; end // fall to the floor
 		
         // // TODO: Collison Detection
         // if(new_pos/pos_in is going to collide) begin
@@ -122,13 +126,13 @@ begin
         //     end
         //     else begin 
         //         //case fall onto the floor
-        //         is_grounded=1'b1;
+        //         is_grounded_in=1'b1;
         //         fireboy_Y_Motion_in=0;
         //     end
         // end
 
         /* ---- Animation Logics ---- */
-        frame_counter_in = frame_counter+2'd1; //increment frame counter every frame
+        frame_counter_in = frame_counter+2'd1; //increment frame counter every frame, this is for lower the frame rate..
         if(frame_counter == 2'd3) begin
             frame_counter_in = 2'd0;
             frame_index_in = (frame_index+3'b01)%fireboy_idle_frame_size;

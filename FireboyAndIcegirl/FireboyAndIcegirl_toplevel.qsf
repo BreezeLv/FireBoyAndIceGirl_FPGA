@@ -52,18 +52,9 @@ set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "SYSTEMVERILOG HDL" -section_id eda_simulation
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name QIP_FILE final_project/synthesis/final_project.qip
-set_global_assignment -name QIP_FILE vga_clk.qip
-set_global_assignment -name SYSTEMVERILOG_FILE FireboyAndIcegirl_toplevel.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ball.sv
-set_global_assignment -name SYSTEMVERILOG_FILE Color_Mapper.sv
-set_global_assignment -name SYSTEMVERILOG_FILE HexDriver.sv
-set_global_assignment -name SYSTEMVERILOG_FILE hpi_io_intf.sv
-set_global_assignment -name SYSTEMVERILOG_FILE VGA_controller.sv
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name SYSTEMVERILOG_FILE bgController.sv
 
 set_location_assignment PIN_A17 -to ENET0_GTX_CLK
 set_location_assignment PIN_A21 -to ENET0_INT_N
@@ -584,6 +575,14 @@ set_location_assignment PIN_G4 -to OTG_DATA[15]
 set_location_assignment PIN_C14 -to ENET0_LINK100
 set_location_assignment PIN_D13 -to ENET1_LINK100
 set_location_assignment PIN_A14 -to ENETCLK_25
+set_global_assignment -name QIP_FILE final_project/synthesis/final_project.qip
+set_global_assignment -name QIP_FILE vga_clk.qip
+set_global_assignment -name SYSTEMVERILOG_FILE FireboyAndIcegirl_toplevel.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Color_Mapper.sv
+set_global_assignment -name SYSTEMVERILOG_FILE HexDriver.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hpi_io_intf.sv
+set_global_assignment -name SYSTEMVERILOG_FILE VGA_controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE bgController.sv
 set_global_assignment -name SYSTEMVERILOG_FILE GameController.sv
 set_global_assignment -name SYSTEMVERILOG_FILE playerController.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
