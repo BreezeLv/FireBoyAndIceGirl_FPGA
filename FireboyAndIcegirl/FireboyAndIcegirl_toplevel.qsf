@@ -585,4 +585,5 @@ set_global_assignment -name SYSTEMVERILOG_FILE VGA_controller.sv
 set_global_assignment -name SYSTEMVERILOG_FILE bgController.sv
 set_global_assignment -name SYSTEMVERILOG_FILE GameController.sv
 set_global_assignment -name SYSTEMVERILOG_FILE playerController.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Collider.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

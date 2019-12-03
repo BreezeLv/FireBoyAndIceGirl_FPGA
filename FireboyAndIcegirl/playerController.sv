@@ -116,9 +116,9 @@ begin
         fireboy_Y_Pos_in = fireboy_Y_Pos + fireboy_Y_Motion_in;
 		
         // Bound the fireboy pos to be stayed in frame
-        if(fireboy_X_Pos_in < fireboy_X_Min) fireboy_X_Pos_in=0;
+        if(fireboy_X_Pos_in < fireboy_X_Min) fireboy_X_Pos_in=fireboy_X_Min;
         else if(fireboy_X_Pos_in + fireboy_width >= fireboy_X_Max) fireboy_X_Pos_in=fireboy_X_Max-fireboy_width-1;
-        if(fireboy_Y_Pos_in < fireboy_Y_Min) begin fireboy_Y_Pos_in=0; fireboy_Y_Motion_in=0; end //jump touch the ceiling
+        if(fireboy_Y_Pos_in < fireboy_Y_Min) begin fireboy_Y_Pos_in=fireboy_Y_Min; fireboy_Y_Motion_in=0; end //jump touch the ceiling
         else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) begin fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1; is_grounded_in=1'b1; fireboy_Y_Motion_in=0; end // fall to the floor
 		
         // // TODO: Collison Detection
