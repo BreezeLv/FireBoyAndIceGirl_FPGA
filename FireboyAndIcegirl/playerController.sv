@@ -14,10 +14,10 @@ module FireBoy (
 // Fireboy parameters
 parameter [9:0] fireboy_width = 32;
 parameter [9:0] fireboy_height = 48;
-integer         fireboy_X_Min = 0;       // Leftmost point on the X axis
-integer         fireboy_X_Max = 639;     // Rightmost point on the X axis
-integer         fireboy_Y_Min = 0;       // Topmost point on the Y axis
-integer         fireboy_Y_Max = 479;     // Bottommost point on the Y axis
+// integer         fireboy_X_Min = 0;       // Leftmost point on the X axis
+// integer         fireboy_X_Max = 639;     // Rightmost point on the X axis
+// integer         fireboy_Y_Min = 0;       // Topmost point on the Y axis
+// integer         fireboy_Y_Max = 479;     // Bottommost point on the Y axis
 parameter [9:0] fireboy_start_pos_X = 10'd32;
 parameter [9:0] fireboy_start_pos_Y = 10'd416;
 parameter [9:0] fireboy_max_velocity_X = 10'd2;
@@ -31,6 +31,10 @@ parameter [1:0] fireboy_idle_frame_duration = 2'd3;
 // movement variables
 integer fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
 integer fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
+
+// Collision Boundary
+integer fireboy_X_Min, fireboy_X_Max, fireboy_Y_Min, fireboy_Y_Max;
+Collider fireboy_collider_inst(.player_X_Pos(fireboy_X_Pos), .player_Y_Pos(fireboy_Y_Pos), .player_X_Min(fireboy_X_Min), .player_X_Max(fireboy_X_Max), .player_Y_Min(fireboy_Y_Min), .player_Y_Max(fireboy_Y_Max));
 
 // jump variables
 logic is_grounded, is_grounded_in;
@@ -70,7 +74,7 @@ begin
         frame_index <= frame_index_in;
         frame_counter <= frame_counter_in;
         anim_type <= anim_type_in;
-		  is_grounded <= is_grounded_in;
+        is_grounded <= is_grounded_in;
     end
 end
 
@@ -85,7 +89,7 @@ begin
 	frame_index_in = frame_index;
 	frame_counter_in = frame_counter;
     anim_type_in = anim_type;
-	 is_grounded_in = is_grounded;
+    is_grounded_in = is_grounded;
 
     //keybaord interrput
     // if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded=1'b0; end //Jump
@@ -101,9 +105,9 @@ begin
         // Jump
         // make fireboy always pulling by gravity, and falling as much as possible
         // (think about the case when fireboy falling from an edge of a platform..)
-		  if(frame_counter == 2'd3) begin
-				fireboy_Y_Motion_in = fireboy_Y_Motion + fireboy_gravity; // add a divisor to gravitiy..
-		  end
+        if(frame_counter == 2'd3) begin
+            fireboy_Y_Motion_in = fireboy_Y_Motion + fireboy_gravity; // add a divisor to gravitiy..
+        end
         if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded_in=1'b0; end
         
     
