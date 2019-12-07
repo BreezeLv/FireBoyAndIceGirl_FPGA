@@ -80,29 +80,29 @@ module Collider (
             end
         end
         else begin
-            if(player_X_Pos + 32 < 400) begin
-                if(player_Y_Pos >= 383) begin
-                    player_X_Max = 575;
-                    player_Y_Min = 383;
-                end
-                else if(player_Y_Pos >= 287) begin
-                    player_Y_Min = 287;
-                    player_Y_Max = 367;
-                end
-            end
-            else if(player_X_Pos + 32 < 432) begin
-                if(player_Y_Pos >= 303) begin
-                    player_X_Max = 575;
-                    player_Y_Min = 303;
-                end
-            end
-            else begin
-                if(player_Y_Pos >= 287) begin
-                    player_X_Max = 575;
-                    player_Y_Min = 319;
-                    player_Y_Max = 415;
-                end
-            end
+//            if(player_X_Pos + 32 < 400) begin
+//                if(player_Y_Pos >= 383) begin
+//                    player_X_Max = 575;
+//                    player_Y_Min = 383;
+//                end
+//                else if(player_Y_Pos >= 287) begin
+//                    player_Y_Min = 287;
+//                    player_Y_Max = 367;
+//                end
+//            end
+//            else if(player_X_Pos + 32 < 432) begin
+//                if(player_Y_Pos >= 303) begin
+//                    player_X_Max = 575;
+//                    player_Y_Min = 303;
+//                end
+//            end
+//            else begin
+//                if(player_Y_Pos >= 287) begin
+//                    player_X_Max = 575;
+//                    player_Y_Min = 319;
+//                    player_Y_Max = 415;
+//                end
+//            end
         end
     end
 

@@ -140,9 +140,9 @@ begin
             frame_index_in = (frame_index+3'b01)%fireboy_idle_frame_size;
         end
         // Update Animation Type
-        if(fireboy_Y_Motion_in > 0) anim_type_in = Jump;
-        else if(fireboy_Y_Motion_in < 0) anim_type_in = Fall;
-        else if(fireboy_X_Motion_in != 32'b0) anim_type_in = Run;
+//        if(fireboy_Y_Motion_in > 0) anim_type_in = Jump;
+//        else if(fireboy_Y_Motion_in < 0) anim_type_in = Fall;
+        if(fireboy_X_Motion_in != 32'b0) anim_type_in = Run;
 		  else anim_type_in = Idle;
         // Overwrite/Reset Frame Index if switch Animation Type
         if(anim_type_in != anim_type) begin frame_index_in=3'd0; frame_counter_in=2'd0; end

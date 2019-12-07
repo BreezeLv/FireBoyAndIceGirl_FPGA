@@ -573,10 +573,10 @@ int main(void)
 				mask |= 0x40;
 				break;
 			case 0x04:
-				if(!mask&0x10) mask |= 0x20; //check right flag first for preceding purpose
+				if(!(mask&0x10)) mask |= 0x20; //check right flag first for preceding purpose
 				break;
 			case 0x07:
-				if(!mask&0x20) mask |= 0x10;
+				if(!(mask&0x20)) mask |= 0x10;
 				break;
 
 			//Icegirl Region
@@ -584,10 +584,10 @@ int main(void)
 				mask |= 0x04;
 				break;
 			case 0x50:
-				if(!mask&0x01) mask |= 0x02; //check right flag first for preceding purpose
+				if(!(mask&0x01)) mask |= 0x02; //check right flag first for preceding purpose
 				break;
 			case 0x4f:
-				if(!mask&0x02) mask |= 0x01;
+				if(!(mask&0x02)) mask |= 0x01;
 				break;
 
 			default:
