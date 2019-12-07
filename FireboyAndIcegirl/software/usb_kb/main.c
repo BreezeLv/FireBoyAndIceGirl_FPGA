@@ -550,13 +550,51 @@ int main(void)
 		// The first two keycodes are stored in 0x051E. Other keycodes are in 
 		// subsequent addresses.
 		keycode = UsbRead(0x051e);
-		printf("\nfirst two keycode values are %04x\n",keycode);
+		// printf("\nfirst two keycode values are %04x\n",keycode);
+
 		keycode <<= 16;
-		keycode |= UsbRead(0x051f);
-		printf("\nsecond two keycode values are %04x\n",keycode);
+		keycode |= UsbRead(0x0520);
+		printf("\nfirdst four keycode values are %x\n",keycode);
+
 		// We only need the first keycode, which is at the lower byte of keycode.
 		// Send the keycode to hardware via PIO.
-		*keycode_base = keycode & 0xff; 
+		// *keycode_base = keycode & 0xff;
+
+		/*
+			Directly Calculated the movement keys press status and send through keycode
+		*/
+		alt_u8 presses[4] = {(keycode>>16)&0xff, (keycode>>24)&0xff, (keycode)&0xff, (keycode>>8)&0xff};
+		alt_u8 mask = 0; int i;
+		for(i = 0; i < 4; i++) {
+			switch (presses[i])
+			{
+			//Fireboy Region
+			case 0x1a:
+				mask |= 0x40;
+				break;
+			case 0x04:
+				if(!mask&0x10) mask |= 0x20; //check right flag first for preceding purpose
+				break;
+			case 0x07:
+				if(!mask&0x20) mask |= 0x10;
+				break;
+
+			//Icegirl Region
+			case 0x51:
+				mask |= 0x04;
+				break;
+			case 0x49:
+				if(!mask&0x01) mask |= 0x02; //check right flag first for preceding purpose
+				break;
+			case 0x50:
+				if(!mask&0x02) mask |= 0x01;
+				break;
+
+			default:
+				break;
+			}
+		}
+		*keycode_base = mask;
 
 		usleep(200);//usleep(5000);
 		usb_ctl_val = UsbRead(ctl_reg);
