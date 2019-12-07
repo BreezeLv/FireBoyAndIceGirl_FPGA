@@ -551,6 +551,9 @@ int main(void)
 		// subsequent addresses.
 		keycode = UsbRead(0x051e);
 		printf("\nfirst two keycode values are %04x\n",keycode);
+		keycode <<= 16;
+		keycode |= UsbRead(0x051f);
+		printf("\nsecond two keycode values are %04x\n",keycode);
 		// We only need the first keycode, which is at the lower byte of keycode.
 		// Send the keycode to hardware via PIO.
 		*keycode_base = keycode & 0xff; 
