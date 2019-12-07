@@ -4,8 +4,8 @@ typedef enum logic [1:0] {
 
 module FireBoy (
 	input Clk, frame_clk, revive,
-	input [7:0] keycode,
 	input [9:0] DrawX, DrawY,
+	input logic fireboy_jump, fireboy_left, fireboy_right,
 
     output logic is_fireboy,
 	output logic [7:0] fireboy_data
@@ -92,10 +92,8 @@ begin
     is_grounded_in = is_grounded;
 
     //keybaord interrput
-    // if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded=1'b0; end //Jump
-    if(keycode == 8'h04) begin fireboy_X_Motion_in = (~(fireboy_max_velocity_X) + 1'b1); end
-    else if(keycode == 8'h07) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
-//	 else begin fireboy_Y_Motion_in = 0; end
+    if(fireboy_left) begin fireboy_X_Motion_in = (~(fireboy_max_velocity_X) + 1'b1); end
+    else if(fireboy_right) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
 
     // Update position and motion only at rising edge of frame clock
     if (frame_clk_rising_edge)
@@ -108,7 +106,7 @@ begin
         if(frame_counter == 2'd3) begin
             fireboy_Y_Motion_in = fireboy_Y_Motion + fireboy_gravity; // add a divisor to gravitiy..
         end
-        if(keycode == 8'h1a && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded_in=1'b0; end
+        if(fireboy_jump && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded_in=1'b0; end
         
     
         // Update the ball's position with its motion

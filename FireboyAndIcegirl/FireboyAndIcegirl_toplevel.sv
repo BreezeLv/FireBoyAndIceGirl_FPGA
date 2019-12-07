@@ -118,12 +118,17 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     logic revive;
     GameController GameController_inst(.*, .Reset(Reset_h), .gameover(1'b0), .gamewin(1'b0));
 
+    //Player Control
     logic [7:0] bg_data;
     bgController bgCtl_inst(.*);
     logic is_fireboy;
     logic [7:0] fireboy_data;
     FireBoy FireBoy_inst(.*, .frame_clk(~VGA_VS));
     
+    logic fireboy_jump, fireboy_left, fireboy_right, icegirl_jump, icegirl_left, icegirl_right;
+    KeycodeMapper keycodeMapper_inst(.*);
+
+    //Sprite Renderer
     color_mapper color_instance(.*, .bgColor(bg_data));
     
     // Display keycode on hex display

@@ -580,13 +580,13 @@ int main(void)
 				break;
 
 			//Icegirl Region
-			case 0x51:
+			case 0x52:
 				mask |= 0x04;
 				break;
-			case 0x49:
+			case 0x50:
 				if(!mask&0x01) mask |= 0x02; //check right flag first for preceding purpose
 				break;
-			case 0x50:
+			case 0x4f:
 				if(!mask&0x02) mask |= 0x01;
 				break;
 
