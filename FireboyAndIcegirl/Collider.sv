@@ -16,66 +16,58 @@ module Collider (
         //Binary Search
         if(player_X_Pos + 32 < 320) begin
             if(player_X_Pos + 32 < 192) begin
-                if(player_Y_Pos >= 351) begin
+                if(player_Y_Pos >= 415) begin
+                    player_X_Max = 575;
+                    player_Y_Min = 415;
+                end
+                else if(player_Y_Pos >= 351-16) begin
+                    player_X_Max = 256;
+                    player_Y_Min = 351-16;
+                    player_Y_Max = 399;
+                end
+                else if(player_Y_Pos >= 271-16) begin
+                    player_Y_Min = 271-16;
+                    player_Y_Max = 335;
+                end
+            end
+            else if(player_X_Pos + 32 < 256) begin
+                if(player_Y_Pos >= 351-16) begin
                     if(player_Y_Pos >= 415) begin
                         player_X_Max = 575;
-                        player_Y_Min = 415;
+                        player_Y_Min = 351-16;
+                    end
+                    else if(player_Y_Pos + 48 <= 399) begin
+                        player_X_Max = 256;
+                        player_Y_Min = 351-16;
                     end
                     else begin
-                        player_X_Max = 256;
-                        player_Y_Min = 351;
-                        player_Y_Max = 399;
+                        player_X_Min = 192;
+                        player_Y_Min = 351-16;
                     end
                 end
-                else begin
-                    if(player_Y_Pos >= 271) begin
-                        player_Y_Min = 271;
-                        player_Y_Max = 335;
-                    end
+                else if(player_Y_Pos >= 271-16) begin
+                    player_Y_Min = 271-16;
+                    player_Y_Max = 335;
+                end
+            end
+            else if(player_X_Pos + 32 < 288) begin
+                if(player_Y_Pos >= 383) begin
+                    player_X_Max = 575;
+                    player_Y_Min = 383;
+                end
+                else if(player_Y_Pos >= 271-16) begin
+                    player_Y_Min = 271-16;
+                    player_Y_Max = 335;
                 end
             end
             else begin
-                if(player_X_Pos + 32 < 256) begin
-                    if(player_Y_Pos >= 351) begin
-                        if(player_Y_Pos < 468) begin
-                            player_X_Max = 256;
-                            player_Y_Min = 351;
-                        end
-                        else if(player_Y_Pos >= 415) begin
-                            player_X_Max = 575;
-                            player_Y_Min = 351;
-                        end
-                        else begin
-                            player_X_Min = 192;
-                            player_Y_Min = 351;
-                        end
-                    end
-                    else begin
-                        if(player_Y_Pos >= 271) begin
-                            player_Y_Min = 271;
-                            player_Y_Max = 335;
-                        end
-                    end
+                if(player_Y_Pos >= 383) begin
+                    player_X_Max = 575;
+                    player_Y_Min = 383;
                 end
-                else if(player_X_Pos + 32 < 288) begin
-                    if(player_Y_Pos >= 383) begin
-                        player_X_Max = 575;
-                        player_Y_Min = 383;
-                    end
-                    else if(player_Y_Pos >= 271) begin
-                        player_Y_Min = 271;
-                        player_Y_Max = 335;
-                    end
-                end
-                else begin
-                    if(player_Y_Pos >= 383) begin
-                        player_X_Max = 575;
-                        player_Y_Min = 383;
-                    end
-                    else if(player_Y_Pos >= 287) begin
-                        player_Y_Min = 287;
-                        player_Y_Max = 367;
-                    end
+                else if(player_Y_Pos >= 287-16) begin
+                    player_Y_Min = 287-16;
+                    player_Y_Max = 367;
                 end
             end
         end
