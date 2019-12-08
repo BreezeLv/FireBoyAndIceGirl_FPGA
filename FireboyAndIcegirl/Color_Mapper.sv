@@ -82,21 +82,21 @@ assign palette[47] = 24'h00425F;
     begin
         if (is_fireboy && fireboy_data != 8'b00)
         begin
-            Red = palette[fireboy_data[4:0]][23:16];
-            Green = palette[fireboy_data[4:0]][15:8];
-            Blue = palette[fireboy_data[4:0]][7:0];
+            Red = palette[fireboy_data[5:0]][23:16];
+            Green = palette[fireboy_data[5:0]][15:8];
+            Blue = palette[fireboy_data[5:0]][7:0];
         end
         else if (is_icegirl && icegirl_data != 8'b00)
         begin
-            Red = palette[icegirl_data[4:0]][23:16];
-            Green = palette[icegirl_data[4:0]][15:8];
-            Blue = palette[icegirl_data[4:0]][7:0];
+            Red = palette[icegirl_data[5:0]][23:16];
+            Green = palette[icegirl_data[5:0]][15:8];
+            Blue = palette[icegirl_data[5:0]][7:0];
         end
         else
         begin
-            Red = palette[bgColor[4:0]][23:16];
-            Green = palette[bgColor[4:0]][15:8];
-            Blue = palette[bgColor[4:0]][7:0];
+            Red = palette[bgColor[5:0]][23:16];
+            Green = palette[bgColor[5:0]][15:8];
+            Blue = palette[bgColor[5:0]][7:0];
         end
     end 
     

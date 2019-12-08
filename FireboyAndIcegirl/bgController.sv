@@ -15,7 +15,8 @@ logic [18:0] bg_read_addr;
 
 assign bg_read_addr = DrawX%bg_wall_width + (DrawY%bg_wall_height)*bg_wall_width;
 
-bgROM bgRom_inst(.*, .bg_data_out(bg_data));
+// bgROM bgRom_inst(.*, .bg_data_out(bg_data));
+assign bg_data = 8'd4;
 	
 endmodule
 
