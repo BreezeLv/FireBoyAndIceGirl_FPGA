@@ -14,14 +14,14 @@
 //-------------------------------------------------------------------------
 
 // color_mapper: Decide which color to be output to VGA for each pixel.
-module  color_mapper ( input logic is_fireboy,
-                       input logic [7:0] bgColor, fireboy_data,
+module  color_mapper ( input logic is_fireboy, is_icegirl,
+                       input logic [7:0] bgColor, fireboy_data, icegirl_data,
                        input        [9:0] DrawX, DrawY,       // Current pixel coordinates
                        output logic [7:0] VGA_R, VGA_G, VGA_B // VGA RGB output
                      );
 	 
 // parameter [3:0][23:0] palette = {24'hff00ff,24'h2d2d0c,24'h282807,24'h202000};
-logic [23:0] palette [32];
+logic [23:0] palette [48];
 assign palette[0] = 24'hFF00FF;
 assign palette[1] = 24'h2D2D0C;
 assign palette[2] = 24'h282807;
@@ -54,6 +54,22 @@ assign palette[28] = 24'h4FC07E;
 assign palette[29] = 24'h6D97A4;
 assign palette[30] = 24'hACAC9F;
 assign palette[31] = 24'h3F4223;
+assign palette[32] = 24'h00B3FF;
+assign palette[33] = 24'h009CDF;
+assign palette[34] = 24'h00C5FF;
+assign palette[35] = 24'h0081B9;
+assign palette[36] = 24'h73D5FF;
+assign palette[37] = 24'h67D1FF;
+assign palette[38] = 24'h8BDCFF;
+assign palette[39] = 24'h63CFFF;
+assign palette[40] = 24'h84E7FF;
+assign palette[41] = 24'h67FFFF;
+assign palette[42] = 24'h52CECE;
+assign palette[43] = 24'h286464;
+assign palette[44] = 24'h4ABBBB;
+assign palette[45] = 24'h3DB3BE;
+assign palette[46] = 24'h00597F;
+assign palette[47] = 24'h00425F;
 	 
     logic [7:0] Red, Green, Blue;
 
@@ -64,13 +80,19 @@ assign palette[31] = 24'h3F4223;
     
     always_comb
     begin
-        if (is_fireboy && fireboy_data != 8'b00) 
+        if (is_fireboy && fireboy_data != 8'b00)
         begin
             Red = palette[fireboy_data[4:0]][23:16];
             Green = palette[fireboy_data[4:0]][15:8];
             Blue = palette[fireboy_data[4:0]][7:0];
         end
-        else 
+        else if (is_icegirl && icegirl_data != 8'b00)
+        begin
+            Red = palette[icegirl_data[4:0]][23:16];
+            Green = palette[icegirl_data[4:0]][15:8];
+            Blue = palette[icegirl_data[4:0]][7:0];
+        end
+        else
         begin
             Red = palette[bgColor[4:0]][23:16];
             Green = palette[bgColor[4:0]][15:8];

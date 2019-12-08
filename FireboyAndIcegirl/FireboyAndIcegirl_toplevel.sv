@@ -121,9 +121,10 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     //Player Control
     logic [7:0] bg_data;
     bgController bgCtl_inst(.*);
-    logic is_fireboy;
-    logic [7:0] fireboy_data;
+    logic is_fireboy, is_icegirl;
+    logic [7:0] fireboy_data, icegirl_data;
     FireBoy FireBoy_inst(.*, .frame_clk(~VGA_VS));
+    IceGirl IceGirl_inst(.*, .frame_clk(~VGA_VS));
     
     logic fireboy_jump, fireboy_left, fireboy_right, icegirl_jump, icegirl_left, icegirl_right;
     KeycodeMapper keycodeMapper_inst(.*);
