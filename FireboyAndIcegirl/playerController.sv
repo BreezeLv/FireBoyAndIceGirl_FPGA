@@ -8,7 +8,8 @@ module FireBoy (
 	input logic fireboy_jump, fireboy_left, fireboy_right,
 
     output logic is_fireboy,
-	output logic [7:0] fireboy_data
+	output logic [7:0] fireboy_data,
+    output shortint player1_top, player1_bottom, player1_left, player1_right
 );
 
 // Fireboy parameters
@@ -28,7 +29,7 @@ parameter integer fireboy_gravity = 1;
 parameter [2:0] fireboy_idle_frame_size = 3'd4;
 parameter [1:0] fireboy_idle_frame_duration = 2'd3;
 
-// movement variables
+// Movement variables
 integer fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
 integer fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
 
@@ -39,10 +40,16 @@ Collider fireboy_collider_inst(.player_X_Pos(fireboy_X_Pos), .player_Y_Pos(fireb
 // jump variables
 logic is_grounded, is_grounded_in;
 
-//animation variables
+// Animation variables
 logic [2:0] frame_index, frame_index_in;
 logic [1:0] frame_counter, frame_counter_in; // for partially slow the frame rate
 anim_type_enum anim_type, anim_type_in;
+
+// "Fit" Sprite Helper Position
+assign player1_top = fireboy_Y_Pos + 10;
+assign player1_bottom = fireboy_Y_Pos + fireboy_height - 4;
+assign player1_left = fireboy_X_Pos + 4;
+assign player1_right = fireboy_X_Pos + fireboy_width - 4;
 
 // Detect rising edge of frame_clk
 logic frame_clk_delayed, frame_clk_rising_edge;
@@ -118,20 +125,7 @@ begin
         else if(fireboy_X_Pos_in + fireboy_width >= fireboy_X_Max+4) fireboy_X_Pos_in=fireboy_X_Max-fireboy_width-1+4;
         if(fireboy_Y_Pos_in < fireboy_Y_Min) begin fireboy_Y_Pos_in=fireboy_Y_Min; fireboy_Y_Motion_in=0; end //jump touch the ceiling
         else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) begin fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1; is_grounded_in=1'b1; fireboy_Y_Motion_in=0; end // fall to the floor
-		
-        // // TODO: Collison Detection
-        // if(new_pos/pos_in is going to collide) begin
-        //     new_pos/pos_in = pos of surface of that colission;
-        //     if(fireboy_Y_Motion_in<0) begin 
-        //         //case touch the ceiling
-        //         fireboy_Y_Motion_in=0;
-        //     end
-        //     else begin 
-        //         //case fall onto the floor
-        //         is_grounded_in=1'b1;
-        //         fireboy_Y_Motion_in=0;
-        //     end
-        // end
+
 
         /* ---- Animation Logics ---- */
         frame_counter_in = frame_counter+2'd1; //increment frame counter every frame, this is for lower the frame rate..
@@ -250,7 +244,8 @@ module IceGirl (
 	input logic icegirl_jump, icegirl_left, icegirl_right,
 
     output logic is_icegirl,
-	output logic [7:0] icegirl_data
+	output logic [7:0] icegirl_data,
+    output shortint player2_top, player2_bottom, player2_left, player2_right
 );
 
 // Icegirl parameters
@@ -270,7 +265,7 @@ parameter integer icegirl_gravity = 1;
 parameter [2:0] icegirl_idle_frame_size = 3'd4;
 parameter [1:0] icegirl_idle_frame_duration = 2'd3;
 
-// movement variables
+// Movement variables
 integer icegirl_X_Pos, icegirl_X_Motion, icegirl_Y_Pos, icegirl_Y_Motion;
 integer icegirl_X_Pos_in, icegirl_X_Motion_in, icegirl_Y_Pos_in, icegirl_Y_Motion_in;
 
@@ -278,13 +273,19 @@ integer icegirl_X_Pos_in, icegirl_X_Motion_in, icegirl_Y_Pos_in, icegirl_Y_Motio
 integer icegirl_X_Min, icegirl_X_Max, icegirl_Y_Min, icegirl_Y_Max;
 Collider icegirl_collider_inst(.player_X_Pos(icegirl_X_Pos), .player_Y_Pos(icegirl_Y_Pos), .player_X_Min(icegirl_X_Min), .player_X_Max(icegirl_X_Max), .player_Y_Min(icegirl_Y_Min), .player_Y_Max(icegirl_Y_Max));
 
-// jump variables
+// Jump variables
 logic is_grounded, is_grounded_in;
 
-//animation variables
+// Animation variables
 logic [2:0] frame_index, frame_index_in;
 logic [1:0] frame_counter, frame_counter_in; // for partially slow the frame rate
 anim_type_enum anim_type, anim_type_in;
+
+// "Fit" Sprite Helper Position
+assign player2_top = icegirl_Y_Pos + 10;
+assign player2_bottom = icegirl_Y_Pos + icegirl_height - 4;
+assign player2_left = icegirl_X_Pos + 13;
+assign player2_right = icegirl_X_Pos + icegirl_width - 13;
 
 // Detect rising edge of frame_clk
 logic frame_clk_delayed, frame_clk_rising_edge;
@@ -361,19 +362,6 @@ begin
         if(icegirl_Y_Pos_in < icegirl_Y_Min) begin icegirl_Y_Pos_in=icegirl_Y_Min; icegirl_Y_Motion_in=0; end //jump touch the ceiling
         else if(icegirl_Y_Pos_in + icegirl_height >= icegirl_Y_Max) begin icegirl_Y_Pos_in=icegirl_Y_Max-icegirl_height-1; is_grounded_in=1'b1; icegirl_Y_Motion_in=0; end // fall to the floor
 		
-        // // TODO: Collison Detection
-        // if(new_pos/pos_in is going to collide) begin
-        //     new_pos/pos_in = pos of surface of that colission;
-        //     if(icegirl_Y_Motion_in<0) begin 
-        //         //case touch the ceiling
-        //         icegirl_Y_Motion_in=0;
-        //     end
-        //     else begin 
-        //         //case fall onto the floor
-        //         is_grounded_in=1'b1;
-        //         icegirl_Y_Motion_in=0;
-        //     end
-        // end
 
         /* ---- Animation Logics ---- */
         frame_counter_in = frame_counter+2'd1; //increment frame counter every frame, this is for lower the frame rate..

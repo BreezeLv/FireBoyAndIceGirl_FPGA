@@ -118,19 +118,29 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     logic revive;
     GameController GameController_inst(.*, .Reset(Reset_h), .gameover(1'b0), .gamewin(1'b0));
 
-    //Player Control
+    // Background Control
     logic [7:0] bg_data;
     bgController bgCtl_inst(.*);
+
+    // Player Control
     logic is_fireboy, is_icegirl;
     logic [7:0] fireboy_data, icegirl_data;
     FireBoy FireBoy_inst(.*, .frame_clk(~VGA_VS));
     IceGirl IceGirl_inst(.*, .frame_clk(~VGA_VS));
     
+    // Multiple Key Press Buffer/Middler
     logic fireboy_jump, fireboy_left, fireboy_right, icegirl_jump, icegirl_left, icegirl_right;
     KeycodeMapper keycodeMapper_inst(.*);
 
-    //Sprite Renderer
-    color_mapper color_instance(.*, .bgColor(bg_data));
+    // Score Display
+    shortint player1_top, player1_bottom, player1_left, player1_right;
+    shortint player2_top, player2_bottom, player2_left, player2_right;
+    logic is_score, is_gem;
+    logic [7:0] score_data, gem_data;
+    ScoreController ScoreController_inst(.*, .Reset(revive))
+
+    // Sprite Renderer
+    color_mapper color_instance(.*);
     
     // Display keycode on hex display
     HexDriver hex_inst_0 (bg_data[3:0], HEX0);
