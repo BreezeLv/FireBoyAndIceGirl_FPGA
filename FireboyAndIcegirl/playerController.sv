@@ -114,8 +114,8 @@ begin
         fireboy_Y_Pos_in = fireboy_Y_Pos + fireboy_Y_Motion_in;
 		
         // Bound the fireboy pos to be stayed in frame
-        if(fireboy_X_Pos_in < fireboy_X_Min) fireboy_X_Pos_in=fireboy_X_Min;
-        else if(fireboy_X_Pos_in + fireboy_width >= fireboy_X_Max) fireboy_X_Pos_in=fireboy_X_Max-fireboy_width-1;
+        if(fireboy_X_Pos_in < fireboy_X_Min - 4) fireboy_X_Pos_in=fireboy_X_Min-4;
+        else if(fireboy_X_Pos_in + fireboy_width >= fireboy_X_Max+4) fireboy_X_Pos_in=fireboy_X_Max-fireboy_width-1+4;
         if(fireboy_Y_Pos_in < fireboy_Y_Min) begin fireboy_Y_Pos_in=fireboy_Y_Min; fireboy_Y_Motion_in=0; end //jump touch the ceiling
         else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) begin fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1; is_grounded_in=1'b1; fireboy_Y_Motion_in=0; end // fall to the floor
 		
@@ -186,26 +186,26 @@ module fireboyROM
 
 //logic [7:0] mem [0:2][0:1535];
 logic [7:0] mem_idle_0 [0:1535];
-logic [7:0] mem_idle_1 [0:1535];
-logic [7:0] mem_idle_2 [0:1535];
-logic [7:0] mem_idle_3 [0:1535];
+// logic [7:0] mem_idle_1 [0:1535];
+// logic [7:0] mem_idle_2 [0:1535];
+// logic [7:0] mem_idle_3 [0:1535];
 
 logic [7:0] mem_run_0 [0:1535];
-logic [7:0] mem_run_1 [0:1535];
-logic [7:0] mem_run_2 [0:1535];
-logic [7:0] mem_run_3 [0:1535];
+// logic [7:0] mem_run_1 [0:1535];
+// logic [7:0] mem_run_2 [0:1535];
+// logic [7:0] mem_run_3 [0:1535];
 
 initial
 begin
 	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_0.txt", mem_idle_0);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_1.txt", mem_idle_1);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_2.txt", mem_idle_2);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_3.txt", mem_idle_3);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_1.txt", mem_idle_1);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_2.txt", mem_idle_2);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_3.txt", mem_idle_3);
 
      $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_0.txt", mem_run_0);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_2.txt", mem_run_1);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_4.txt", mem_run_2);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_6.txt", mem_run_3);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_2.txt", mem_run_1);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_4.txt", mem_run_2);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_6.txt", mem_run_3);
 end
 
 logic [7:0] mem_content;
@@ -213,18 +213,18 @@ always_comb begin
     case(anim_type)
         Run: begin
             case(frame_index)
-                3'd1: mem_content = mem_run_1[fireboy_read_addr];
-                3'd2: mem_content = mem_run_2[fireboy_read_addr];
-                3'd3: mem_content = mem_run_3[fireboy_read_addr];
+                // 3'd1: mem_content = mem_run_1[fireboy_read_addr];
+                // 3'd2: mem_content = mem_run_2[fireboy_read_addr];
+                // 3'd3: mem_content = mem_run_3[fireboy_read_addr];
                 default: mem_content = mem_run_0[fireboy_read_addr];
             endcase
         end
 
         default: begin
             case(frame_index)
-                3'd1: mem_content = mem_idle_1[fireboy_read_addr];
-                3'd2: mem_content = mem_idle_2[fireboy_read_addr];
-                3'd3: mem_content = mem_idle_3[fireboy_read_addr];
+                // 3'd1: mem_content = mem_idle_1[fireboy_read_addr];
+                // 3'd2: mem_content = mem_idle_2[fireboy_read_addr];
+                // 3'd3: mem_content = mem_idle_3[fireboy_read_addr];
                 default: mem_content = mem_idle_0[fireboy_read_addr];
             endcase
         end
@@ -260,7 +260,7 @@ parameter [9:0] icegirl_height = 48;
 // integer         icegirl_X_Max = 639;     // Rightmost point on the X axis
 // integer         icegirl_Y_Min = 0;       // Topmost point on the Y axis
 // integer         icegirl_Y_Max = 479;     // Bottommost point on the Y axis
-parameter [9:0] icegirl_start_pos_X = 10'd32;
+parameter [9:0] icegirl_start_pos_X = 10'd24;
 parameter [9:0] icegirl_start_pos_Y = 10'd350;
 parameter [9:0] icegirl_max_velocity_X = 10'd2;
 
@@ -356,8 +356,8 @@ begin
         icegirl_Y_Pos_in = icegirl_Y_Pos + icegirl_Y_Motion_in;
 		
         // Bound the icegirl pos to be stayed in frame
-        if(icegirl_X_Pos_in < icegirl_X_Min) icegirl_X_Pos_in=icegirl_X_Min;
-        else if(icegirl_X_Pos_in + icegirl_width >= icegirl_X_Max) icegirl_X_Pos_in=icegirl_X_Max-icegirl_width-1;
+        if(icegirl_X_Pos_in < icegirl_X_Min-13) icegirl_X_Pos_in=icegirl_X_Min-13;
+        else if(icegirl_X_Pos_in + icegirl_width >= icegirl_X_Max+13) icegirl_X_Pos_in=icegirl_X_Max-icegirl_width-1+13;
         if(icegirl_Y_Pos_in < icegirl_Y_Min) begin icegirl_Y_Pos_in=icegirl_Y_Min; icegirl_Y_Motion_in=0; end //jump touch the ceiling
         else if(icegirl_Y_Pos_in + icegirl_height >= icegirl_Y_Max) begin icegirl_Y_Pos_in=icegirl_Y_Max-icegirl_height-1; is_grounded_in=1'b1; icegirl_Y_Motion_in=0; end // fall to the floor
 		
@@ -428,26 +428,26 @@ module icegirlROM
 
 //logic [7:0] mem [0:2][0:2303];
 logic [7:0] mem_idle_0 [0:2303];
-logic [7:0] mem_idle_1 [0:2303];
-logic [7:0] mem_idle_2 [0:2303];
-logic [7:0] mem_idle_3 [0:2303];
+// logic [7:0] mem_idle_1 [0:2303];
+// logic [7:0] mem_idle_2 [0:2303];
+// logic [7:0] mem_idle_3 [0:2303];
 
 logic [7:0] mem_run_0 [0:2303];
-logic [7:0] mem_run_1 [0:2303];
-logic [7:0] mem_run_2 [0:2303];
-logic [7:0] mem_run_3 [0:2303];
+// logic [7:0] mem_run_1 [0:2303];
+// logic [7:0] mem_run_2 [0:2303];
+// logic [7:0] mem_run_3 [0:2303];
 
 initial
 begin
 	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_0.txt", mem_idle_0);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_1.txt", mem_idle_1);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_2.txt", mem_idle_2);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_3.txt", mem_idle_3);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_1.txt", mem_idle_1);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_2.txt", mem_idle_2);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_3.txt", mem_idle_3);
 
      $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_0.txt", mem_run_0);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_1.txt", mem_run_1);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_2.txt", mem_run_2);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_3.txt", mem_run_3);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_1.txt", mem_run_1);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_2.txt", mem_run_2);
+	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_3.txt", mem_run_3);
 end
 
 logic [7:0] mem_content;
@@ -455,18 +455,18 @@ always_comb begin
     case(anim_type)
         Run: begin
             case(frame_index)
-                3'd1: mem_content = mem_run_1[icegirl_read_addr];
-                3'd2: mem_content = mem_run_2[icegirl_read_addr];
-                3'd3: mem_content = mem_run_3[icegirl_read_addr];
+                // 3'd1: mem_content = mem_run_1[icegirl_read_addr];
+                // 3'd2: mem_content = mem_run_2[icegirl_read_addr];
+                // 3'd3: mem_content = mem_run_3[icegirl_read_addr];
                 default: mem_content = mem_run_0[icegirl_read_addr];
             endcase
         end
 
         default: begin
             case(frame_index)
-                3'd1: mem_content = mem_idle_1[icegirl_read_addr];
-                3'd2: mem_content = mem_idle_2[icegirl_read_addr];
-                3'd3: mem_content = mem_idle_3[icegirl_read_addr];
+                // 3'd1: mem_content = mem_idle_1[icegirl_read_addr];
+                // 3'd2: mem_content = mem_idle_2[icegirl_read_addr];
+                // 3'd3: mem_content = mem_idle_3[icegirl_read_addr];
                 default: mem_content = mem_idle_0[icegirl_read_addr];
             endcase
         end
