@@ -4,22 +4,25 @@ module ScoreController (
     input shortint player1_top, player1_bottom, player1_left, player1_right,
     input shortint player2_top, player2_bottom, player2_left, player2_right,
     output logic is_score, is_gem,
-    output logic [7:0] score_data, gem_data
+    output logic [7:0] score_data, gem_data,
+	 output logic [3:0] score_hex
 );
-    
+
     parameter gem_count = 2;
-    parameter shortint gem_pos [gem_count][1:0] = {{320,440}, {431,431}};//{{320,431},{440,431}};
+    parameter shortint gem_pos [gem_count][2] = '{'{320,440}, '{431,431}};
 
     parameter shortint font_width = 8;
     parameter shortint font_height = 16;
-    parameter [6:0] font_0_index = 8'h30;
-    parameter shortint score_start_X_pos = 320-4;
-    parameter shortint score_start_Y_pos = 48-8;
+    parameter [6:0] font_0_index = 7'h30;
+    parameter [9:0] score_start_X_pos = 32;
+    parameter [9:0] score_start_Y_pos = 414;
 
     logic [3:0] score, score_in; // score = [0,15]
-    logic dead_gems [gem_count-1:0]
+    logic dead_gems [gem_count-1:0];
     logic is_gems [gem_count-1:0];
     logic [7:0] gems_data [gem_count-1:0];
+	 
+	 assign score_hex = score; //debug
 
     always_ff @ (posedge Clk) begin
         if(Reset) begin
@@ -38,7 +41,7 @@ module ScoreController (
 
         for (int i = 0; i < gem_count ; i++) begin
             if(dead_gems[i]) score_in++;
-            if(is_gems) begin
+            if(is_gems[i]) begin
                 is_gem = 1'b1;
                 gem_data = gems_data[i];
             end
@@ -50,7 +53,7 @@ module ScoreController (
 
 
     /* ---- Font Logics ---- */
-    shortint offset_X, offset_Y;
+    logic [9:0] offset_X, offset_Y;
 
     always_comb begin
         offset_X = DrawX-score_start_X_pos;
@@ -58,15 +61,15 @@ module ScoreController (
         is_score = 1'b0;
 
         if(offset_X>=0 && offset_X<font_width && offset_Y>=0 && offset_Y<font_height) begin
-            is_score=1'b1; 
+            is_score=1'b1;
         end
     end
 
     logic [10:0] score_read_addr;
     logic [7:0] score_data_buf;
 
-    assign score_read_addr = {font_0_index+{3'h0,score}, offset_Y};
-    assign score_data = is_score ? (score_data_buf[offset_X] ? 8'h08 : 8'h00) : 8'h00;
+    assign score_read_addr = {font_0_index+{3'b000,score}, offset_Y[3:0]};
+    assign score_data = score_data_buf[7-offset_X[2:0]] == 1'b1 ? 8'h08 : 8'h00;
     Font_ROM Font_ROM_inst(.addr(score_read_addr), .data(score_data_buf));
 
 endmodule
@@ -91,6 +94,7 @@ module Gem (
         if(Reset) dead <= 1'b0;
         else begin
             if(!dead) dead <= dead_in;
+				else dead <= dead;
         end
     end
 
@@ -110,7 +114,7 @@ module Gem (
         is_gem = 1'b0;
 
         if(offset_X>=0 && offset_X<gem_width && offset_Y>=0 && offset_Y<gem_height) begin
-            is_gem=1'b1; 
+            is_gem=1'b1;
         end
     end
 

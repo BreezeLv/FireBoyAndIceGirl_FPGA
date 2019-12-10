@@ -137,13 +137,14 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     shortint player2_top, player2_bottom, player2_left, player2_right;
     logic is_score, is_gem;
     logic [7:0] score_data, gem_data;
-    ScoreController ScoreController_inst(.*, .Reset(revive))
+    ScoreController ScoreController_inst(.*, .Reset(revive));
+	 logic [3:0] score_hex;
 
     // Sprite Renderer
     color_mapper color_instance(.*);
     
     // Display keycode on hex display
-    HexDriver hex_inst_0 (bg_data[3:0], HEX0);
+    HexDriver hex_inst_0 (score_hex, HEX0);
     HexDriver hex_inst_1 (bg_data[7:4], HEX1);
     
 endmodule

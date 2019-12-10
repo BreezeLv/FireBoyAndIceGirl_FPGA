@@ -5,10 +5,10 @@ module Font_ROM (
                 
         parameter ADDR_WIDTH = 11;
         parameter DATA_WIDTH =  8;
-	logic [ADDR_WIDTH-1:0] addr_reg;
+
 				
 	// ROM definition				
-	parameter [0:2**ADDR_WIDTH-1][DATA_WIDTH-1:0] ROM = {
+	logic [0:2**ADDR_WIDTH-1][DATA_WIDTH-1:0] ROM = {
         8'b00000000, // 0
         8'b00000000, // 1
         8'b00000000, // 2
