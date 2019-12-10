@@ -426,16 +426,16 @@ module icegirlROM
 	output logic [7:0] icegirl_data_out
 );
 
-//logic [7:0] mem [0:2][0:1535];
-logic [7:0] mem_idle_0 [0:1535];
-logic [7:0] mem_idle_1 [0:1535];
-logic [7:0] mem_idle_2 [0:1535];
-logic [7:0] mem_idle_3 [0:1535];
+//logic [7:0] mem [0:2][0:2303];
+logic [7:0] mem_idle_0 [0:2303];
+logic [7:0] mem_idle_1 [0:2303];
+logic [7:0] mem_idle_2 [0:2303];
+logic [7:0] mem_idle_3 [0:2303];
 
-logic [7:0] mem_run_0 [0:1535];
-logic [7:0] mem_run_1 [0:1535];
-logic [7:0] mem_run_2 [0:1535];
-logic [7:0] mem_run_3 [0:1535];
+logic [7:0] mem_run_0 [0:2303];
+logic [7:0] mem_run_1 [0:2303];
+logic [7:0] mem_run_2 [0:2303];
+logic [7:0] mem_run_3 [0:2303];
 
 initial
 begin
@@ -445,9 +445,9 @@ begin
 	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_3.txt", mem_idle_3);
 
      $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_0.txt", mem_run_0);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_2.txt", mem_run_1);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_4.txt", mem_run_2);
-	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_6.txt", mem_run_3);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_1.txt", mem_run_1);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_2.txt", mem_run_2);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_3.txt", mem_run_3);
 end
 
 logic [7:0] mem_content;
