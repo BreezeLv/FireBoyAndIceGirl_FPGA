@@ -14,8 +14,8 @@ module ScoreController (
     parameter shortint font_width = 8;
     parameter shortint font_height = 16;
     parameter [6:0] font_0_index = 7'h30;
-    parameter [9:0] score_start_X_pos = 32;
-    parameter [9:0] score_start_Y_pos = 414;
+    parameter [9:0] score_start_X_pos = 320-4;
+    parameter [9:0] score_start_Y_pos = 48-8;
 
     logic [3:0] score, score_in; // score = [0,15]
     logic dead_gems [gem_count-1:0];

@@ -1,6 +1,6 @@
 module Collider (
-    input integer player_X_Pos, player_Y_Pos,
-    output integer player_X_Min, player_X_Max, player_Y_Min, player_Y_Max
+    input shortint player_X_Pos, player_Y_Pos,
+    output shortint player_X_Min, player_X_Max, player_Y_Min, player_Y_Max
 );
     
     // level 1 hardcoded raycast hittest version

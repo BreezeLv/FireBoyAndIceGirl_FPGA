@@ -15,26 +15,22 @@ module FireBoy (
 // Fireboy parameters
 parameter [9:0] fireboy_width = 32;
 parameter [9:0] fireboy_height = 48;
-// integer         fireboy_X_Min = 0;       // Leftmost point on the X axis
-// integer         fireboy_X_Max = 639;     // Rightmost point on the X axis
-// integer         fireboy_Y_Min = 0;       // Topmost point on the Y axis
-// integer         fireboy_Y_Max = 479;     // Bottommost point on the Y axis
 parameter [9:0] fireboy_start_pos_X = 10'd32;
 parameter [9:0] fireboy_start_pos_Y = 10'd414;
 parameter [9:0] fireboy_max_velocity_X = 10'd2;
 
-parameter integer fireboy_jump_v0 = -7; //initial velocity
-parameter integer fireboy_gravity = 1;
+parameter shortint fireboy_jump_v0 = -7; //initial velocity
+parameter shortint fireboy_gravity = 1;
 
 parameter [2:0] fireboy_idle_frame_size = 3'd4;
 parameter [1:0] fireboy_idle_frame_duration = 2'd3;
 
 // Movement variables
-integer fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
-integer fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
+shortint fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
+shortint fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
 
 // Collision Boundary
-integer fireboy_X_Min, fireboy_X_Max, fireboy_Y_Min, fireboy_Y_Max;
+shortint fireboy_X_Min, fireboy_X_Max, fireboy_Y_Min, fireboy_Y_Max;
 Collider fireboy_collider_inst(.player_X_Pos(fireboy_X_Pos), .player_Y_Pos(fireboy_Y_Pos), .player_X_Min(fireboy_X_Min), .player_X_Max(fireboy_X_Max), .player_Y_Min(fireboy_Y_Min), .player_Y_Max(fireboy_Y_Max));
 
 // jump variables
@@ -251,26 +247,22 @@ module IceGirl (
 // Icegirl parameters
 parameter [9:0] icegirl_width = 48;
 parameter [9:0] icegirl_height = 48;
-// integer         icegirl_X_Min = 0;       // Leftmost point on the X axis
-// integer         icegirl_X_Max = 639;     // Rightmost point on the X axis
-// integer         icegirl_Y_Min = 0;       // Topmost point on the Y axis
-// integer         icegirl_Y_Max = 479;     // Bottommost point on the Y axis
 parameter [9:0] icegirl_start_pos_X = 10'd24;
 parameter [9:0] icegirl_start_pos_Y = 10'd350;
 parameter [9:0] icegirl_max_velocity_X = 10'd2;
 
-parameter integer icegirl_jump_v0 = -7; //initial velocity
-parameter integer icegirl_gravity = 1;
+parameter shortint icegirl_jump_v0 = -7; //initial velocity
+parameter shortint icegirl_gravity = 1;
 
 parameter [2:0] icegirl_idle_frame_size = 3'd4;
 parameter [1:0] icegirl_idle_frame_duration = 2'd3;
 
 // Movement variables
-integer icegirl_X_Pos, icegirl_X_Motion, icegirl_Y_Pos, icegirl_Y_Motion;
-integer icegirl_X_Pos_in, icegirl_X_Motion_in, icegirl_Y_Pos_in, icegirl_Y_Motion_in;
+shortint icegirl_X_Pos, icegirl_X_Motion, icegirl_Y_Pos, icegirl_Y_Motion;
+shortint icegirl_X_Pos_in, icegirl_X_Motion_in, icegirl_Y_Pos_in, icegirl_Y_Motion_in;
 
 // Collision Boundary
-integer icegirl_X_Min, icegirl_X_Max, icegirl_Y_Min, icegirl_Y_Max;
+shortint icegirl_X_Min, icegirl_X_Max, icegirl_Y_Min, icegirl_Y_Max;
 Collider icegirl_collider_inst(.player_X_Pos(icegirl_X_Pos), .player_Y_Pos(icegirl_Y_Pos), .player_X_Min(icegirl_X_Min), .player_X_Max(icegirl_X_Max), .player_Y_Min(icegirl_Y_Min), .player_Y_Max(icegirl_Y_Max));
 
 // Jump variables
