@@ -145,7 +145,7 @@ module gemROM
 	output logic [7:0] gem_data_out
 );
 
- logic [7:0] mem_gem [0:455];
+logic [7:0] mem_gem [0:455];
 
 initial
 begin
