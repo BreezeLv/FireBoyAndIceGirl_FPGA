@@ -13,10 +13,10 @@ module ScoreController (
 
     parameter shortint font_width = 8;
     parameter shortint font_height = 16;
-    parameter [2:0] font_scale = 2;
+//    parameter [2:0] font_scale = 2'd2; # for simplicity, we'll just do a hardcode scale x2
     parameter [6:0] font_0_index = 7'h30;
-    parameter [9:0] score_start_X_pos = 320-font_width*font_scale/2;
-    parameter [9:0] score_start_Y_pos = 30-font_height*font_scale/2;
+    parameter [9:0] score_start_X_pos = 320-font_width;
+    parameter [9:0] score_start_Y_pos = 30-font_height;
 
     logic [3:0] score, score_in; // score = [0,15]
     logic dead_gems [gem_count-1:0];
@@ -65,26 +65,29 @@ module ScoreController (
 	 
     /* ---- Font Logics ---- */
     logic [9:0] offset_X, offset_Y;
+	 logic [9:0] scaled_offset_X, scaled_offset_Y;
+	 assign scaled_offset_X = offset_X>>1;
+	 assign scaled_offset_Y = offset_Y>>1;
 
     always_comb begin
         offset_X = DrawX-score_start_X_pos;
         offset_Y = DrawY-score_start_Y_pos;
         is_score = 1'b0;
 
-        if(offset_X>=0 && offset_X<font_width*font_scale && offset_Y>=0 && offset_Y<font_height*font_scale) begin
+        if(offset_X>=0 && offset_X<font_width*2 && offset_Y>=0 && offset_Y<font_height*2) begin
             is_score=1'b1;
         end
     end
 
-    // logic [3+scale/2+1:0:0] score_read_addr;
-    // logic [7:0] score_data_buf;
+    logic [10:0] score_read_addr;
+    logic [7:0] score_data_buf;
 
-    // assign score_read_addr = {font_0_index+{3'b000,score}, offset_Y[3:0]};
-    // assign score_data = score_data_buf[7-offset_X[2:0]] == 1'b1 ? 8'h08 : 8'h00;
-    // Font_ROM Font_ROM_inst(.addr(score_read_addr), .data(score_data_buf));
+    assign score_read_addr = {font_0_index+{3'b000,score}, scaled_offset_Y[3:0]};
+    assign score_data = score_data_buf[font_width-1-scaled_offset_X[2:0]] == 1'b1 ? 8'h08 : 8'h00;
+    Font_ROM Font_ROM_inst(.addr(score_read_addr), .data(score_data_buf));
 
-    // assign score_read_addr = is_score ? offset_X + offset_Y*font_width*font_scale : 19'b00;;
-    Font_Wrapper #(.scale(font_scale)) Font_Wrapper_inst (.*, .font_idx(font_0_index+{3'b000,score}), .data(score_data));
+		//Failing module, unknown bug.. seems the module isn't even loaded??
+//    Font_Wrapper Font_Wrapper_inst (.*, .font_idx(font_0_index+{3'b000,score}), .data(score_data));
 
 endmodule
 
