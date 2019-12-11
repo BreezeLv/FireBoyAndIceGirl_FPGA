@@ -6,11 +6,15 @@ module Font_Wrapper #(parameter scale=2) (
 
         parameter shortint font_width = 8;
         parameter shortint font_height = 16;
+		  
+		  logic [9:0] scaled_offset_X, scaled_offset_Y;
+		  assign scaled_offset_X = offset_X/scale;
+		  assign scaled_offset_Y = offset_Y/scale;
 
         logic [7:0] data_buf;
 
-        assign read_addr = {font_idx, (offset_X/scale + offset_Y/scale*font_width)[3:0]};
-        assign score_data = data_buf[font_width-1-(offset_X/scale)[2:0]] == 1'b1 ? 8'h08 : 8'h00;
+        assign read_addr = {font_idx, scaled_offset_Y[3:0]};
+        assign data = data_buf[font_width-1-scaled_offset_X[2:0]] == 1'b1 ? 8'h08 : 8'h00;
         Font_ROM Font_ROM_inst(.addr(read_addr), .data(data_buf));
 
 endmodule
