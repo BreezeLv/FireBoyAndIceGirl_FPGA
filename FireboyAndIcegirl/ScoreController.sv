@@ -20,7 +20,7 @@ module ScoreController (
     logic [3:0] score, score_in; // score = [0,15]
     logic dead_gems [gem_count-1:0];
     logic is_gems [gem_count-1:0];
-    logic [7:0] gems_data [gem_count-1:0];
+    logic [8:0] gems_read_addr [gem_count-1:0];
 	 
 	 assign score_hex = score; //debug
 
@@ -33,24 +33,33 @@ module ScoreController (
         end
     end
 
+    /* ---- Gem Logics ---- */
+
     always_comb begin
 
         score_in = 4'h0;
         is_gem = 1'b0;
+        gem_read_addr = 9'h00;
         gem_data = 8'h00;
 
         for (int i = 0; i < gem_count ; i++) begin
             if(dead_gems[i]) score_in++;
-            if(is_gems[i]) begin
+            else if(is_gems[i]) begin
                 is_gem = 1'b1;
-                gem_data = gems_data[i];
+                gem_read_addr = gems_read_addr[i];
+                gem_data = gem_data_buf;
             end
         end
     end
 
     Gem gem_list [gem_count-1:0] (.*, .gem_X_Pos(gem_pos[0]) ,.gem_Y_Pos(gem_pos[1]),
-     .dead(dead_gems), .is_gem(is_gems), .gem_data(gems_data));
+     .dead(dead_gems), .is_gem(is_gems), .gem_read_addr(gems_read_addr));
+    
+    // Gem Sprite Data Processing
+    logic [8:0] gem_read_addr;
+    logic [7:0] gem_data_buf;
 
+    gemROM gemROM_inst(.*, .gem_data_out(gem_data_buf)); // Global GemRom Instance, can be shared assume no overlapping gems
 
     /* ---- Font Logics ---- */
     logic [9:0] offset_X, offset_Y;
@@ -81,7 +90,7 @@ module Gem (
     input shortint player1_top, player1_bottom, player1_left, player1_right,
     input shortint player2_top, player2_bottom, player2_left, player2_right,
     output dead, is_gem,
-    output logic [7:0] gem_data
+    output logic [8:0] gem_read_addr
 );
 
     parameter shortint gem_width = 24;
@@ -118,13 +127,8 @@ module Gem (
         end
     end
 
-    // Sprite Data Processing
-    logic [8:0] gem_read_addr;
-    logic [7:0] gem_data_buf;
-
+    // Sprite Data Processing ==> Pass to the parent controller for saving Rom space
     assign gem_read_addr = is_gem ? offset_X + offset_Y*gem_width : 19'b00;
-    assign gem_data = dead ? 8'h00 : gem_data_buf; // wipe the rendering after gem being collected
-    gemROM gemROM_inst(.*, .gem_data_out(gem_data_buf));
 
 endmodule
 
