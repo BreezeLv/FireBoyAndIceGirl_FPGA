@@ -116,7 +116,7 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
 
     // Control signals
     logic revive;
-    GameController GameController_inst(.*, .Reset(Reset_h), .gameover(player1_dead|player2_dead), .gamewin(1'b0));
+    GameController GameController_inst(.*, .Reset(Reset_h), .gameover(player1_dead|player2_dead), .gamewin(player1_win&player2_win));
 
     // Background Control
     logic [7:0] bg_data;
@@ -125,6 +125,7 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     // Player Control
     logic is_fireboy, is_icegirl;
     logic [7:0] fireboy_data, icegirl_data;
+    logic player1_win, player2_win;
     FireBoy FireBoy_inst(.*, .frame_clk(~VGA_VS));
     IceGirl IceGirl_inst(.*, .frame_clk(~VGA_VS));
     

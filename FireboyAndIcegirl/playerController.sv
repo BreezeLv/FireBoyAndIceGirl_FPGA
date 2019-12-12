@@ -11,6 +11,7 @@ module FireBoy (
     input logic player1_dead,
 
     output logic is_fireboy,
+    output logic player1_win,
 	output logic [7:0] fireboy_data,
     output shortint player1_top, player1_bottom, player1_left, player1_right
 );
@@ -21,6 +22,10 @@ parameter [9:0] fireboy_height = 48;
 parameter [9:0] fireboy_start_pos_X = 10'd32;
 parameter [9:0] fireboy_start_pos_Y = 10'd414;
 parameter [9:0] fireboy_max_velocity_X = 10'd2;
+
+parameter [9:0] fireboy_end_pos_X = 10'd544;
+parameter [9:0] fireboy_end_pos_Y = 10'd126;
+parameter shortint exit_radius = 16;
 
 parameter shortint fireboy_jump_v0 = -7; //initial velocity
 parameter shortint fireboy_gravity = 1;
@@ -52,6 +57,9 @@ assign player1_top = fireboy_Y_Pos + 10;
 assign player1_bottom = fireboy_Y_Pos + fireboy_height - 4;
 assign player1_left = fireboy_X_Pos + 4;
 assign player1_right = fireboy_X_Pos + fireboy_width - 4;
+
+//Winning Condition
+assign player1_win = player1_right > fireboy_end_pos_X-exit_radius && player1_left < fireboy_end_pos_X+exit_radius && player1_bottom > fireboy_end_pos_Y-exit_radius && player1_top < fireboy_end_pos_Y+exit_radius;
 
 // Detect rising edge of frame_clk
 logic frame_clk_delayed, frame_clk_rising_edge;
@@ -261,6 +269,7 @@ module IceGirl (
     input logic player2_dead,
 
     output logic is_icegirl,
+    output logic player2_win,
 	output logic [7:0] icegirl_data,
     output shortint player2_top, player2_bottom, player2_left, player2_right
 );
@@ -271,6 +280,10 @@ parameter [9:0] icegirl_height = 48;
 parameter [9:0] icegirl_start_pos_X = 10'd24;
 parameter [9:0] icegirl_start_pos_Y = 10'd350;
 parameter [9:0] icegirl_max_velocity_X = 10'd2;
+
+parameter [9:0] icegirl_end_pos_X = 10'd544;
+parameter [9:0] icegirl_end_pos_Y = 10'd126;
+parameter shortint exit_radius = 16;
 
 parameter shortint icegirl_jump_v0 = -7; //initial velocity
 parameter shortint icegirl_gravity = 1;
@@ -302,6 +315,9 @@ assign player2_top = icegirl_Y_Pos + 10;
 assign player2_bottom = icegirl_Y_Pos + icegirl_height - 4;
 assign player2_left = icegirl_X_Pos + 13;
 assign player2_right = icegirl_X_Pos + icegirl_width - 13;
+
+//Winning Condition
+assign player1_win = player1_right > icegirl_end_pos_X-exit_radius && player1_left < icegirl_end_pos_X+exit_radius && player1_bottom > icegirl_end_pos_Y-exit_radius && player1_top < icegirl_end_pos_Y+exit_radius;
 
 // Detect rising edge of frame_clk
 logic frame_clk_delayed, frame_clk_rising_edge;
