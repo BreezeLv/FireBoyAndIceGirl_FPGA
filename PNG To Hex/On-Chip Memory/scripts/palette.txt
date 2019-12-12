@@ -63,7 +63,7 @@
 51: 8CFF8C
 52: 28C800
 
-# elevator
+# Elevator
 53: B7B7B7 : Grey Region..
 54: AAAAAA
 55: 4C4C4C
@@ -75,3 +75,10 @@
 61: 1A1A1A
 62: B4B400 : Elevator Inner Fill
 63: FAFA00
+
+# Switch
+64: FFCC33
+65: FFB74A
+66: F49300
+67: 895200
+68: C67700
