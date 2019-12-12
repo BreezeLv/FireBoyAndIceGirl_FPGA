@@ -1,3 +1,9 @@
+// Just show a possible solution for flexible switch count for every elevator..
+typedef struct #(switch_count) {
+    shortint switch_X_Pos [switch_count];
+    shortint switch_Y_Pos [switch_count];
+} switch_pack;
+
 module ElevatorController (
     input Clk, frame_clk, Reset,
     input [9:0] DrawX, DrawY,
@@ -14,9 +20,17 @@ module ElevatorController (
     parameter shortint elevator_end_pos [elevator_count][2] = '{'{23,550}, '{303,256}};
     parameter shortint elevator_minmax_y_pos [elevator_count][2] = '{'{208,119}, '{335,272}};
 
+    // parameter shortint switch_count [elevator_count] = '{2,2};
+    parameter shortint max_switch_count = 2;
+    parameter shortint switch_X_Pos [max_switch_count][elevator_count] = '{'{190,190},'{486,486}}; //could use -1 to represent non-use
+    parameter shortint switch_Y_Pos [max_switch_count][elevator_count] = '{'{240,319},'{256,176}};
+
     logic is_elevators [elevator_count-1:0];
     logic [9:0] elevators_read_addr [elevator_count-1:0];
     logic elevators_on [elevator_count-1:0];
+
+    logic is_switchs [elevator_count-1:0];
+    logic switchs_data [elevator_count-1:0];
 
     logic is_collide_player1 [elevator_count-1:0];
     logic is_collide_player2 [elevator_count-1:0];
@@ -28,12 +42,18 @@ module ElevatorController (
         is_elevator = 1'b0;
         elevator_read_addr = 9'h00;
         elevator_data = 8'h00;
+        is_switch = 1'b0;
+        switch_data = 8'h00;
 
         for (int i = 0; i < elevator_count ; i++) begin
-            else if(is_elevators[i]) begin
+            if(is_elevators[i]) begin
                 is_elevator = 1'b1;
                 elevator_read_addr = elevators_read_addr[i];
                 elevator_data = elevator_data_buf + elevators_on[i];
+            end
+            if(is_switchs[i]) begin
+                is_switch=1'b1;
+                switch_data=switchs_data[i];
             end
         end
     end
@@ -43,9 +63,12 @@ module ElevatorController (
                 .elevator_Start_Pos_X(elevator_start_pos[0]),
                 .elevator_Start_Pos_Y(elevator_start_pos[1]),
                 .elevator_End_Pos_X(elevator_end_pos[0]),
-                .elevator_End_Pos_Y(elevator_end_pos[1])) elevator_list [elevator_count-1:0] ( .*,
+                .elevator_End_Pos_Y(elevator_end_pos[1]),
+                .switch_count(max_switch_count)) elevator_list [elevator_count-1:0] ( .*,
                                                                             .is_elevator(is_elevators),
                                                                             .elevator_on(elevators_on),
+                                                                            .is_switch(is_switchs),
+                                                                            .switch_data(switchs_data),
                                                                             .player1_X_Min(player1_X_Min_in),
                                                                             .player1_X_Max(player1_X_Max_in),
                                                                             .player1_Y_Min(player1_Y_Min_in),
@@ -72,13 +95,17 @@ module Elevator #(
     elevator_Start_Pos_X,
     elevator_Start_Pos_Y,
     elevator_End_Pos_X,
-    elevator_End_Pos_Y
+    elevator_End_Pos_Y,
+    switch_count
     ) (
     input Clk, frame_clk, Reset,
     input [9:0] DrawX, DrawY,
     input shortint player1_top, player1_bottom, player1_left, player1_right,
     input shortint player2_top, player2_bottom, player2_left, player2_right,
-    output is_elevator, is_collide_player1, is_collide_player2,
+    input shortint switch_X_Pos[switch_count], switch_Y_Pos[switch_count],
+    output is_elevator, is_switch,
+    output [7:0] switch_data,
+    output is_collide_player1, is_collide_player2,
     output elevator_on,
     output [9:0] elevator_read_addr,
     output shortint player1_X_Min, player1_X_Max, player1_Y_Min, player1_Y_Max,
@@ -157,7 +184,7 @@ module Elevator #(
             if(frame_counter == frame_rate_divider) frame_counter_in = 2'd0;
             else frame_counter_in = frame_counter+2'd1;
 
-            // Calculate Elevator-Player Collision Logics
+            /* --- Calculate Elevator-Player Collision Logics --- */
             player1_X_Min=0;
             player1_X_Max=639;
             player1_Y_Min=0;
@@ -209,6 +236,55 @@ module Elevator #(
 
     assign elevator_read_addr = is_elevator ? offset_X + offset_Y*elevator_width : 19'b00;
 
+
+
+
+    /* --- Gathering and producing info for related switches --- */
+
+    // Example for really use the flexible switch count for each elevator below: (might use latch)
+    // But for simplicity, we'll just assume and use universal max_switch_count and it should always be filled..
+    // shortint switch_count, switch_count_in;
+    // initial begin
+    //     switch_count=max_switch_count;
+    //     switch_count_in=switch_count;
+    //     for (int i = 0; i < max_switch_count; i++) begin
+    //         if(switch_X_Pos[i] < 0) switch_count_in--;
+    //     end
+    //     switch_count=switch_count_in;
+    // end
+
+    logic switchs_on [switch_count-1:0];
+    logic is_switchs [switch_count-1:0];
+    logic [8:0] switchs_read_addr [switch_count-1:0];
+
+    always_comb begin
+
+        is_switch = 1'b0;
+        switch_read_addr = 9'h00;
+        switch_data = 8'h00;
+        on_in = on;
+
+        for (int i = 0; i < switch_count ; i++) begin
+            if(switchs_on[i]) on_in=1'b1;
+            else if(is_switchs[i]) begin //use elif for skipping rendering for cases switch being pressed
+                is_switch = 1'b1;
+                switch_read_addr = switchs_read_addr[i];
+                switch_data = switch_data_buf;
+            end
+        end
+    end
+
+    Elevator_Switch switch_list [switch_count-1:0] (.*, .state(switchs_on), .is_switch(is_switchs), .switch_read_addr(switchs_read_addr));
+
+    // switch Sprite Data Processing
+    logic [8:0] switch_read_addr;
+    logic [7:0] switch_data_buf;
+
+    // For simplicity reason, didnt do even higher level abstract/sorting data..
+    // which means, each elevator will have one switchROM for its own switches..
+    switchROM switchROM_inst(.*, .switch_data_out(switch_data_buf));
+
+
 endmodule
 
 
@@ -244,7 +320,7 @@ module Elevator_Switch (
     input shortint switch_X_Pos, switch_Y_Pos,
     input shortint player1_top, player1_bottom, player1_left, player1_right,
     input shortint player2_top, player2_bottom, player2_left, player2_right,
-    output state,
+    output state, //0 for not pressed, 1 for pressed
     output is_switch, //for simplicity, we can only use same type of elevater switch thus one shared elevator together with switch state to determine the switch_data!
     output logic [8:0] switch_read_addr
 );
