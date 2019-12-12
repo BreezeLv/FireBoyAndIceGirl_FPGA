@@ -202,26 +202,26 @@ module fireboyROM
 
 //logic [7:0] mem [0:2][0:1535];
 logic [7:0] mem_idle_0 [0:1535];
-// logic [7:0] mem_idle_1 [0:1535];
-// logic [7:0] mem_idle_2 [0:1535];
-// logic [7:0] mem_idle_3 [0:1535];
+logic [7:0] mem_idle_1 [0:1535];
+logic [7:0] mem_idle_2 [0:1535];
+logic [7:0] mem_idle_3 [0:1535];
 
 logic [7:0] mem_run_0 [0:1535];
-// logic [7:0] mem_run_1 [0:1535];
-// logic [7:0] mem_run_2 [0:1535];
-// logic [7:0] mem_run_3 [0:1535];
+logic [7:0] mem_run_1 [0:1535];
+logic [7:0] mem_run_2 [0:1535];
+logic [7:0] mem_run_3 [0:1535];
 
 initial
 begin
 	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_0.txt", mem_idle_0);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_1.txt", mem_idle_1);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_2.txt", mem_idle_2);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_3.txt", mem_idle_3);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_1.txt", mem_idle_1);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_2.txt", mem_idle_2);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_idle_frame_3.txt", mem_idle_3);
 
      $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_0.txt", mem_run_0);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_2.txt", mem_run_1);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_4.txt", mem_run_2);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_6.txt", mem_run_3);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_2.txt", mem_run_1);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_4.txt", mem_run_2);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/fireboy_run_frame_6.txt", mem_run_3);
 end
 
 logic [7:0] mem_content;
@@ -229,18 +229,18 @@ always_comb begin
     case(anim_type)
         Run: begin
             case(frame_index)
-                // 3'd1: mem_content = mem_run_1[fireboy_read_addr];
-                // 3'd2: mem_content = mem_run_2[fireboy_read_addr];
-                // 3'd3: mem_content = mem_run_3[fireboy_read_addr];
+                3'd1: mem_content = mem_run_1[fireboy_read_addr];
+                3'd2: mem_content = mem_run_2[fireboy_read_addr];
+                3'd3: mem_content = mem_run_3[fireboy_read_addr];
                 default: mem_content = mem_run_0[fireboy_read_addr];
             endcase
         end
 
         default: begin
             case(frame_index)
-                // 3'd1: mem_content = mem_idle_1[fireboy_read_addr];
-                // 3'd2: mem_content = mem_idle_2[fireboy_read_addr];
-                // 3'd3: mem_content = mem_idle_3[fireboy_read_addr];
+                3'd1: mem_content = mem_idle_1[fireboy_read_addr];
+                3'd2: mem_content = mem_idle_2[fireboy_read_addr];
+                3'd3: mem_content = mem_idle_3[fireboy_read_addr];
                 default: mem_content = mem_idle_0[fireboy_read_addr];
             endcase
         end
@@ -460,26 +460,26 @@ module icegirlROM
 
 //logic [7:0] mem [0:2][0:2303];
 logic [7:0] mem_idle_0 [0:2303];
-// logic [7:0] mem_idle_1 [0:2303];
-// logic [7:0] mem_idle_2 [0:2303];
-// logic [7:0] mem_idle_3 [0:2303];
+logic [7:0] mem_idle_1 [0:2303];
+logic [7:0] mem_idle_2 [0:2303];
+logic [7:0] mem_idle_3 [0:2303];
 
 logic [7:0] mem_run_0 [0:2303];
-// logic [7:0] mem_run_1 [0:2303];
-// logic [7:0] mem_run_2 [0:2303];
-// logic [7:0] mem_run_3 [0:2303];
+logic [7:0] mem_run_1 [0:2303];
+logic [7:0] mem_run_2 [0:2303];
+logic [7:0] mem_run_3 [0:2303];
 
 initial
 begin
 	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_0.txt", mem_idle_0);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_1.txt", mem_idle_1);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_2.txt", mem_idle_2);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_3.txt", mem_idle_3);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_1.txt", mem_idle_1);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_2.txt", mem_idle_2);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_idle_frame_3.txt", mem_idle_3);
 
      $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_0.txt", mem_run_0);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_1.txt", mem_run_1);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_2.txt", mem_run_2);
-	//  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_3.txt", mem_run_3);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_1.txt", mem_run_1);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_2.txt", mem_run_2);
+	 $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/icegirl_run_frame_3.txt", mem_run_3);
 end
 
 logic [7:0] mem_content;
@@ -487,18 +487,18 @@ always_comb begin
     case(anim_type)
         Run: begin
             case(frame_index)
-                // 3'd1: mem_content = mem_run_1[icegirl_read_addr];
-                // 3'd2: mem_content = mem_run_2[icegirl_read_addr];
-                // 3'd3: mem_content = mem_run_3[icegirl_read_addr];
+                3'd1: mem_content = mem_run_1[icegirl_read_addr];
+                3'd2: mem_content = mem_run_2[icegirl_read_addr];
+                3'd3: mem_content = mem_run_3[icegirl_read_addr];
                 default: mem_content = mem_run_0[icegirl_read_addr];
             endcase
         end
 
         default: begin
             case(frame_index)
-                // 3'd1: mem_content = mem_idle_1[icegirl_read_addr];
-                // 3'd2: mem_content = mem_idle_2[icegirl_read_addr];
-                // 3'd3: mem_content = mem_idle_3[icegirl_read_addr];
+                3'd1: mem_content = mem_idle_1[icegirl_read_addr];
+                3'd2: mem_content = mem_idle_2[icegirl_read_addr];
+                3'd3: mem_content = mem_idle_3[icegirl_read_addr];
                 default: mem_content = mem_idle_0[icegirl_read_addr];
             endcase
         end

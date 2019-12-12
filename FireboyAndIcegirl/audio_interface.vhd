@@ -69,7 +69,7 @@ type rom_type is array (0 to word_limit) of std_logic_vector(7 downto 0);
 constant SCI_REG_ROM : rom_type := (
 	x"12", -- Deactivate, R9
 	x"01", -- Mute L/R, Load Simul, R0
-	x"06", -- Headphone volume - R2
+	x"0F", -- Headphone volume - R2
 	x"08", -- DAC Unmute, R4
 	x"0A", -- DAC Stuff, R5
 	x"0C", -- More DAC stuff, R6
@@ -80,13 +80,13 @@ constant SCI_REG_ROM : rom_type := (
 
 constant SCI_DAT_ROM : rom_type := (
 	"00000000", -- Deactivate - R9
-	"00010111", -- ADC L/R Volume - R0 Old: "00011111"
+	"00011111", -- ADC L/R Volume - R0 Old: "00011111"
 	"11111001", -- Headphone volume - R2 Old: "11111001" "11110001"
 	"00010000", -- Select DAC - R4
 	"00000101", -- Turn off de-emphasis,  Off with HPF, unmute; DAC Old: "00010110" - R5
 	"01100010", -- Device power on, ADC/DAC power on - R6
 	"01000011", -- Master, 16-bits, DSP mode; Old: "00001011" - R7
-	"00001100", -- Normal, 8kHz - R8 old : "00001100"
+	"00000000", -- Normal, 8kHz - R8 old : "00001100"
 	"00000001" -- Reactivate - R9
 );
 	

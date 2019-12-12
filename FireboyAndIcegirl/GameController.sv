@@ -74,8 +74,8 @@ always_comb begin
         InGame: begin
             
             if(jump) begin
-                audiocounter_in = 0; 
-                audioclkcounter_in = 0;
+                // audiocounter_in = 0; 
+                // audioclkcounter_in = 0;
                 audioclkcounter_in = audioclkcounter + 1;
                 if(audioclkcounter == 6249) begin
                     audiocounter_in = audiocounter + 1;
