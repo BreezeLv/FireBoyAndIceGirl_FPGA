@@ -97,13 +97,15 @@ begin
     anim_type_in = anim_type;
     is_grounded_in = is_grounded;
 
-    //keybaord interrput
-    if(fireboy_left) begin fireboy_X_Motion_in = (~(fireboy_max_velocity_X) + 1'b1); end
-    else if(fireboy_right) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
 
     // Update position and motion only at rising edge of frame clock
     if (frame_clk_rising_edge && !player1_dead)
     begin
+
+        //keybaord interrput
+        if(fireboy_left) begin fireboy_X_Motion_in = (~(fireboy_max_velocity_X) + 1'b1); end
+        else if(fireboy_right) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
+
 
         /* ---- Player Movement Logics ---- */
         // Jump
@@ -339,13 +341,14 @@ begin
     anim_type_in = anim_type;
     is_grounded_in = is_grounded;
 
-    //keybaord interrput
-    if(icegirl_left) begin icegirl_X_Motion_in = (~(icegirl_max_velocity_X) + 1'b1); end
-    else if(icegirl_right) begin icegirl_X_Motion_in = icegirl_max_velocity_X; end
 
     // Update position and motion only at rising edge of frame clock
     if (frame_clk_rising_edge && !player2_dead)
     begin
+
+        //keybaord interrput
+        if(icegirl_left) begin icegirl_X_Motion_in = (~(icegirl_max_velocity_X) + 1'b1); end
+        else if(icegirl_right) begin icegirl_X_Motion_in = icegirl_max_velocity_X; end
 
         /* ---- Player Movement Logics ---- */
         // Jump
