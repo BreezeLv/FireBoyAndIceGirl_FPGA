@@ -43,7 +43,9 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
                                  DRAM_CKE,     //SDRAM Clock Enable
                                  DRAM_WE_N,    //SDRAM Write Enable
                                  DRAM_CS_N,    //SDRAM Chip Select
-                                 DRAM_CLK      //SDRAM Clock
+                                 DRAM_CLK,    //SDRAM Clock
+            input AUD_ADCDAT, AUD_DACLRCK, AUD_ADCLRCK, AUD_BCLK,
+            output logic AUD_DACDAT, AUD_XCK, I2C_SCLK, I2C_SDAT
                     );
     
     logic Reset_h, Clk;
@@ -116,7 +118,7 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
 
     // Control signals
     logic revive;
-    GameController GameController_inst(.*, .Reset(Reset_h), .gameover(player1_dead|player2_dead), .gamewin(player1_win&player2_win));
+    GameController GameController_inst(.*, .jump(fireboy_jump | icegirl_jump), .Reset(Reset_h), .gameover(player1_dead|player2_dead), .gamewin(player1_win&player2_win));
 
     // Background Control
     logic [7:0] bg_data;
