@@ -1,5 +1,6 @@
 module ElevatorController (
     input Clk, frame_clk, Reset,
+    input [9:0] DrawX, DrawY,
     input shortint player1_top, player1_bottom, player1_left, player1_right,
     input shortint player2_top, player2_bottom, player2_left, player2_right,
     output is_elevator, is_switch,
@@ -74,6 +75,7 @@ module Elevator #(
     elevator_End_Pos_Y
     ) (
     input Clk, frame_clk, Reset,
+    input [9:0] DrawX, DrawY,
     input shortint player1_top, player1_bottom, player1_left, player1_right,
     input shortint player2_top, player2_bottom, player2_left, player2_right,
     output is_elevator, is_collide_player1, is_collide_player2,
@@ -238,8 +240,75 @@ endmodule
 
 module Elevator_Switch (
     input Clk, Reset,
+    input [9:0] DrawX, DrawY,
+    input shortint switch_X_Pos, switch_Y_Pos,
+    input shortint player1_top, player1_bottom, player1_left, player1_right,
+    input shortint player2_top, player2_bottom, player2_left, player2_right,
     output state,
-    output is_switch //for simplicity, we can only use same type of elevater switch thus one shared elevator together with switch state to determine the switch_data!
+    output is_switch, //for simplicity, we can only use same type of elevater switch thus one shared elevator together with switch state to determine the switch_data!
+    output logic [8:0] switch_read_addr
 );
-//TODO:
+
+    parameter shortint switch_width = 32;
+    parameter shortint switch_height = 12;
+
+    shortint switch_left = switch_X_Pos+8;
+    shortint switch_right = switch_X_Pos+switch_width-8;
+
+    logic state_in;
+
+    always_ff @ (posedge Clk) begin
+        if(Reset) state <= 1'b0;
+        else begin
+            state <= state_in;
+        end
+    end
+
+    always_comb begin
+        state_in = 1'b0;
+        if(player1_right > switch_left && player1_left < switch_right && player1_bottom > switch_Y_Pos && player1_top < switch_Y_Pos+switch_height) state_in=1'b1;
+        if(player2_right > switch_left && player2_left < switch_right && player2_bottom > switch_Y_Pos && player2_top < switch_Y_Pos+switch_height) state_in=1'b1;
+    end
+
+    /* ---- Sprite Logics ---- */
+    // Calculate is_switch logic
+    shortint offset_X, offset_Y;
+
+    always_comb begin
+        offset_X = DrawX-switch_X_Pos;
+        offset_Y = DrawY-switch_Y_Pos;
+        is_switch = 1'b0;
+
+        if(offset_X>=0 && offset_X<switch_width && offset_Y>=0 && offset_Y<switch_height) begin
+            is_switch=1'b1;
+        end
+    end
+
+    // Sprite Data Processing ==> Pass to the parent controller for saving Rom space
+    assign switch_read_addr = is_switch ? offset_X + offset_Y*switch_width : 19'b00;
+
+endmodule
+
+
+
+module switchROM
+(
+	input [8:0] switch_read_addr,
+	input Clk,
+
+	output logic [7:0] switch_data_out
+);
+
+    logic [7:0] mem_switch [0:383];
+
+    initial
+    begin
+        $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/switch.txt", mem_switch);
+    end
+
+    always_ff @ (posedge Clk)
+    begin
+        switch_data_out <= mem_switch[switch_read_addr];
+    end
+
 endmodule

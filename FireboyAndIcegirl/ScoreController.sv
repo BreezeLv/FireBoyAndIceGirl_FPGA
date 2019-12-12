@@ -111,7 +111,7 @@ module Gem (
         if(Reset) dead <= 1'b0;
         else begin
             if(!dead) dead <= dead_in;
-				else dead <= dead;
+            else dead <= dead;
         end
     end
 
@@ -148,16 +148,16 @@ module gemROM
 	output logic [7:0] gem_data_out
 );
 
-logic [7:0] mem_gem [0:455];
+    logic [7:0] mem_gem [0:455];
 
-initial
-begin
-	  $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/gem.txt", mem_gem);
-end
+    initial
+    begin
+        $readmemh("../PNG To Hex/On-Chip Memory/sprite_bytes/gem.txt", mem_gem);
+    end
 
-always_ff @ (posedge Clk)
-begin
-	gem_data_out <= mem_gem[gem_read_addr];
-end
+    always_ff @ (posedge Clk)
+    begin
+        gem_data_out <= mem_gem[gem_read_addr];
+    end
 
 endmodule
