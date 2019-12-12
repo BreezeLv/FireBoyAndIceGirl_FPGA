@@ -36,23 +36,21 @@ module ElevatorController (
 
     logic is_collide_player1_in [elevator_count-1:0];
     logic is_collide_player2_in [elevator_count-1:0];
-		shortint player1_X_Min_in [elevator_count];
-		shortint player1_X_Max_in [elevator_count];
-		shortint player1_Y_Min_in [elevator_count];
-		shortint player1_Y_Max_in [elevator_count];
-		shortint player2_X_Min_in [elevator_count];
-		shortint player2_X_Max_in [elevator_count];
-		shortint player2_Y_Min_in [elevator_count];
-		shortint player2_Y_Max_in [elevator_count];
-//    shortint player1_X_Min_in, player1_X_Max_in, player1_Y_Min_in, player1_Y_Max_in [elevator_count-1:0];
-//    shortint player2_X_Min_in, player2_X_Max_in, player2_Y_Min_in, player2_Y_Max_in [elevator_count-1:0];
+    shortint player1_X_Min_in [elevator_count];
+    shortint player1_X_Max_in [elevator_count];
+    shortint player1_Y_Min_in [elevator_count];
+    shortint player1_Y_Max_in [elevator_count];
+    shortint player2_X_Min_in [elevator_count];
+    shortint player2_X_Max_in [elevator_count];
+    shortint player2_Y_Min_in [elevator_count];
+    shortint player2_Y_Max_in [elevator_count];
 
     always_comb begin
 
         is_elevator = 1'b0;
         elevator_read_addr = 9'h00;
         elevator_data = 8'h00;
-		  elevator_on = 1'b0;
+        elevator_on = 1'b0;
 
         is_collide_player1=1'b0;
         is_collide_player2=1'b0;
@@ -72,7 +70,7 @@ module ElevatorController (
         for (int i = 0; i < elevator_count ; i++) begin
             if(is_elevators[i]) begin
                 is_elevator = 1'b1;
-					 elevator_on = elevators_on[i];
+                elevator_on = elevators_on[i];
                 elevator_read_addr = elevators_read_addr[i];
                 elevator_data = elevator_data_buf;
             end
@@ -100,31 +98,30 @@ module ElevatorController (
         end
     end
 
-    Elevator #( 
-                .switch_count(max_switch_count)) elevator_list [elevator_count-1:0] ( .*,
-																									 .elevator_collider_min_y(elevator_minmax_y_pos[0]),
-																									 .elevator_collider_max_y(elevator_minmax_y_pos[1]),
-																									 .elevator_Start_Pos_X(elevator_start_pos[0]),
-																									 .elevator_Start_Pos_Y(elevator_start_pos[1]),
-																									 .elevator_End_Pos_X(elevator_end_pos[0]),
-																									 .elevator_End_Pos_Y(elevator_end_pos[1]),
-                                                                            .is_elevator(is_elevators),
-                                                                            .elevator_on(elevators_on),
-																									 .elevator_read_addr(elevators_read_addr),
-                                                                            .is_switch(is_switchs),
-                                                                            .switch_data(switchs_data),
-																									 .is_collide_player1(is_collide_player1_in),
-																									 .is_collide_player2(is_collide_player2_in),
-																									 .switch_X_Pos(switch_X_Pos),
-																									 .switch_Y_Pos(switch_Y_Pos),
-                                                                            .player1_X_Min(player1_X_Min_in),
-                                                                            .player1_X_Max(player1_X_Max_in),
-                                                                            .player1_Y_Min(player1_Y_Min_in),
-                                                                            .player1_Y_Max(player1_Y_Max_in),
-                                                                            .player2_X_Min(player2_X_Min_in),
-                                                                            .player2_X_Max(player2_X_Max_in),
-                                                                            .player2_Y_Min(player2_Y_Min_in),
-                                                                            .player2_Y_Max(player2_Y_Max_in)
+    Elevator #(.switch_count(max_switch_count)) elevator_list [elevator_count-1:0] ( .*,
+																					 .elevator_collider_min_y(elevator_minmax_y_pos[0]),
+                                                                                     .elevator_collider_max_y(elevator_minmax_y_pos[1]),
+                                                                                     .elevator_Start_Pos_X(elevator_start_pos[0]),
+																					 .elevator_Start_Pos_Y(elevator_start_pos[1]),
+																					 .elevator_End_Pos_X(elevator_end_pos[0]),
+																					 .elevator_End_Pos_Y(elevator_end_pos[1]),
+                                                                                     .is_elevator(is_elevators),
+                                                                                     .elevator_on(elevators_on),
+																					 .elevator_read_addr(elevators_read_addr),
+                                                                                     .is_switch(is_switchs),
+                                                                                     .switch_data(switchs_data),
+																					 .is_collide_player1(is_collide_player1_in),
+																					 .is_collide_player2(is_collide_player2_in),
+																					 .switch_X_Pos(switch_X_Pos),
+																					 .switch_Y_Pos(switch_Y_Pos),
+                                                                                     .player1_X_Min(player1_X_Min_in),
+                                                                                     .player1_X_Max(player1_X_Max_in),
+                                                                                     .player1_Y_Min(player1_Y_Min_in),
+                                                                                     .player1_Y_Max(player1_Y_Max_in),
+                                                                                     .player2_X_Min(player2_X_Min_in),
+                                                                                     .player2_X_Max(player2_X_Max_in),
+                                                                                     .player2_Y_Min(player2_Y_Min_in),
+                                                                                     .player2_Y_Max(player2_Y_Max_in)
                                                                         );
 
     // Elevator Sprite Data Processing
@@ -144,7 +141,7 @@ module Elevator #(
     input [9:0] DrawX, DrawY,
     input shortint player1_top, player1_bottom, player1_left, player1_right,
     input shortint player2_top, player2_bottom, player2_left, player2_right,
-	 input shortint elevator_collider_min_y,
+    input shortint elevator_collider_min_y,
     input shortint elevator_collider_max_y,
     input shortint elevator_Start_Pos_X,
     input shortint elevator_Start_Pos_Y,
@@ -193,12 +190,14 @@ module Elevator #(
             elevator_Pos_Y <= elevator_Start_Pos_Y;
             stable <= 1'b0;
             frame_counter <= 2'b00;
+            on <= 1'b0;
         end
         else begin
             elevator_Pos_X <= elevator_Pos_X_in;
             elevator_Pos_Y <= elevator_Pos_Y_in;
             stable <= stable_in;
             frame_counter <= frame_counter_in;
+            on <= on_in;
         end
     end
 
@@ -208,7 +207,7 @@ module Elevator #(
         stable_in = stable;
         frame_counter_in = frame_counter;
 		  
-		  player1_X_Min=0;
+        player1_X_Min=0;
         player1_X_Max=639;
         player1_Y_Min=0;
         player1_Y_Max=479;
