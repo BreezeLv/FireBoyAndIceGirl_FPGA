@@ -11,6 +11,7 @@ module ElevatorController (
     input shortint player2_top, player2_bottom, player2_left, player2_right,
     output is_elevator, is_switch,
     output [7:0] elevator_data, switch_data,
+    output is_collide_player1, is_collide_player2,
     output shortint player1_X_Min, player1_X_Max, player1_Y_Min, player1_Y_Max,
     output shortint player2_X_Min, player2_X_Max, player2_Y_Min, player2_Y_Max
 );
@@ -32,8 +33,8 @@ module ElevatorController (
     logic is_switchs [elevator_count-1:0];
     logic switchs_data [elevator_count-1:0];
 
-    logic is_collide_player1 [elevator_count-1:0];
-    logic is_collide_player2 [elevator_count-1:0];
+    logic is_collide_player1_in [elevator_count-1:0];
+    logic is_collide_player2_in [elevator_count-1:0];
     shortint player1_X_Min_in, player1_X_Max_in, player1_Y_Min_in, player1_Y_Max_in [elevator_count-1:0];
     shortint player2_X_Min_in, player2_X_Max_in, player2_Y_Min_in, player2_Y_Max_in [elevator_count-1:0];
 
@@ -42,8 +43,21 @@ module ElevatorController (
         is_elevator = 1'b0;
         elevator_read_addr = 9'h00;
         elevator_data = 8'h00;
+
+        is_collide_player1=1'b0;
+        is_collide_player2=1'b0;
+        player1_X_Min=0;
+        player1_X_Max=639;
+        player1_Y_Min=0;
+        player1_Y_Max=479;
+        player2_X_Min=0;
+        player2_X_Max=639;
+        player2_Y_Min=0;
+        player2_Y_Max=479;
+
         is_switch = 1'b0;
         switch_data = 8'h00;
+
 
         for (int i = 0; i < elevator_count ; i++) begin
             if(is_elevators[i]) begin
@@ -51,6 +65,23 @@ module ElevatorController (
                 elevator_read_addr = elevators_read_addr[i];
                 elevator_data = elevator_data_buf + elevators_on[i];
             end
+
+            if(is_collide_player1_in[i]) begin
+                is_collide_player1=1'b1;
+                player1_X_Min=player1_X_Min_in[i];
+                player1_X_Max=player1_X_Max_in[i];
+                player1_Y_Min=player1_Y_Min_in[i];
+                player1_Y_Max=player1_Y_Max_in[i];
+            end
+
+            if(is_collide_player2_in[i]) begin
+                is_collide_player2=1'b1;
+                player2_X_Min=player2_X_Min_in[i];
+                player2_X_Max=player2_X_Max_in[i];
+                player2_Y_Min=player2_Y_Min_in[i];
+                player2_Y_Max=player2_Y_Max_in[i];
+            end
+
             if(is_switchs[i]) begin
                 is_switch=1'b1;
                 switch_data=switchs_data[i];

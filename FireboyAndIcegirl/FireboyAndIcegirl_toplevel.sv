@@ -140,6 +140,14 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     ScoreController ScoreController_inst(.*, .Reset(revive));
 	 logic [3:0] score_hex;
 
+    // Elevator Control
+    logic is_collide_player1, is_collide_player2;
+    shortint player1_X_Min, player1_X_Max, player1_Y_Min, player1_Y_Max;
+    shortint player2_X_Min, player2_X_Max, player2_Y_Min, player2_Y_Max;
+    logic is_elevator, is_switch;
+    logic [7:0] elevator_data, switch_data;
+    ElevatorController ElevatorController_inst(.*, .frame_clk(~VGA_VS), .Reset(revive));
+
     // Sprite Renderer
     color_mapper color_instance(.*);
     

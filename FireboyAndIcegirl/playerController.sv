@@ -6,6 +6,8 @@ module FireBoy (
 	input Clk, frame_clk, revive,
 	input [9:0] DrawX, DrawY,
 	input logic fireboy_jump, fireboy_left, fireboy_right,
+    input logic is_collide_player1,
+    input shortint player1_X_Min, player1_X_Max, player1_Y_Min, player1_Y_Max,
 
     output logic is_fireboy,
 	output logic [7:0] fireboy_data,
@@ -122,6 +124,13 @@ begin
         if(fireboy_Y_Pos_in < fireboy_Y_Min) begin fireboy_Y_Pos_in=fireboy_Y_Min; fireboy_Y_Motion_in=0; end //jump touch the ceiling
         else if(fireboy_Y_Pos_in + fireboy_height >= fireboy_Y_Max) begin fireboy_Y_Pos_in=fireboy_Y_Max-fireboy_height-1; is_grounded_in=1'b1; fireboy_Y_Motion_in=0; end // fall to the floor
 
+        // Additional Collision Bounding from Elevators..
+        if(is_collide_player1) begin
+           if(fireboy_X_Pos_in < player1_X_Min - 4) fireboy_X_Pos_in=player1_X_Min-4;
+            else if(fireboy_X_Pos_in + fireboy_width >= player1_X_Max+4) fireboy_X_Pos_in=player1_X_Max-fireboy_width-1+4;
+            if(fireboy_Y_Pos_in < player1_Y_Min) begin fireboy_Y_Pos_in=player1_Y_Min; fireboy_Y_Motion_in=0; end
+            else if(fireboy_Y_Pos_in + fireboy_height >= player1_Y_Max) begin fireboy_Y_Pos_in=player1_Y_Max-fireboy_height-1; is_grounded_in=1'b1; fireboy_Y_Motion_in=0; end 
+        end
 
         /* ---- Animation Logics ---- */
         frame_counter_in = frame_counter+2'd1; //increment frame counter every frame, this is for lower the frame rate..
@@ -238,6 +247,8 @@ module IceGirl (
 	input Clk, frame_clk, revive,
 	input [9:0] DrawX, DrawY,
 	input logic icegirl_jump, icegirl_left, icegirl_right,
+    input logic is_collide_player2,
+    input shortint player2_X_Min, player2_X_Max, player2_Y_Min, player2_Y_Max,
 
     output logic is_icegirl,
 	output logic [7:0] icegirl_data,
@@ -354,6 +365,13 @@ begin
         if(icegirl_Y_Pos_in < icegirl_Y_Min) begin icegirl_Y_Pos_in=icegirl_Y_Min; icegirl_Y_Motion_in=0; end //jump touch the ceiling
         else if(icegirl_Y_Pos_in + icegirl_height >= icegirl_Y_Max) begin icegirl_Y_Pos_in=icegirl_Y_Max-icegirl_height-1; is_grounded_in=1'b1; icegirl_Y_Motion_in=0; end // fall to the floor
 		
+        // Additional Collision Bounding from Elevators..
+        if(is_collide_player2) begin
+           if(fireboy_X_Pos_in < player2_X_Min - 4) fireboy_X_Pos_in=player2_X_Min-4;
+            else if(fireboy_X_Pos_in + fireboy_width >= player2_X_Max+4) fireboy_X_Pos_in=player2_X_Max-fireboy_width-1+4;
+            if(fireboy_Y_Pos_in < player2_Y_Min) begin fireboy_Y_Pos_in=player2_Y_Min; fireboy_Y_Motion_in=0; end
+            else if(fireboy_Y_Pos_in + fireboy_height >= player2_Y_Max) begin fireboy_Y_Pos_in=player2_Y_Max-fireboy_height-1; is_grounded_in=1'b1; fireboy_Y_Motion_in=0; end 
+        end
 
         /* ---- Animation Logics ---- */
         frame_counter_in = frame_counter+2'd1; //increment frame counter every frame, this is for lower the frame rate..

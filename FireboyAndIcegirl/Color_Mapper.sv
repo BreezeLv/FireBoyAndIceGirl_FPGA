@@ -14,14 +14,14 @@
 //-------------------------------------------------------------------------
 
 // color_mapper: Decide which color to be output to VGA for each pixel.
-module  color_mapper ( input logic is_fireboy, is_icegirl, is_score, is_gem,
-                       input logic [7:0] bg_data, fireboy_data, icegirl_data, score_data, gem_data,
+module  color_mapper ( input logic is_fireboy, is_icegirl, is_score, is_gem, is_elevator, is_switch,
+                       input logic [7:0] bg_data, fireboy_data, icegirl_data, score_data, gem_data, elevator_data, switch_data,
                        input        [9:0] DrawX, DrawY,       // Current pixel coordinates
                        output logic [7:0] VGA_R, VGA_G, VGA_B // VGA RGB output
                      );
 	 
 // parameter [3:0][23:0] palette = {24'hff00ff,24'h2d2d0c,24'h282807,24'h202000};
-logic [23:0] palette [53];
+logic [23:0] palette [69];
 assign palette[0] = 24'hFF00FF;
 assign palette[1] = 24'h2D2D0C;
 assign palette[2] = 24'h282807;
@@ -75,6 +75,22 @@ assign palette[49] = 24'h26BF00;
 assign palette[50] = 24'h33FF00;
 assign palette[51] = 24'h8CFF8C;
 assign palette[52] = 24'h28C800;
+assign palette[53] = 24'hB7B7B7;
+assign palette[54] = 24'hAAAAAA;
+assign palette[55] = 24'h4C4C4C;
+assign palette[56] = 24'h9D9D9D;
+assign palette[57] = 24'hE1E1E1;
+assign palette[58] = 24'h656565;
+assign palette[59] = 24'h525252;
+assign palette[60] = 24'h333333;
+assign palette[61] = 24'h1A1A1A;
+assign palette[62] = 24'hB4B400;
+assign palette[63] = 24'hFAFA00;
+assign palette[64] = 24'hFFCC33;
+assign palette[65] = 24'hFFB74A;
+assign palette[66] = 24'hF49300;
+assign palette[67] = 24'h895200;
+assign palette[68] = 24'hC67700;
 	 
     logic [7:0] Red, Green, Blue;
 
@@ -86,29 +102,39 @@ assign palette[52] = 24'h28C800;
     always_comb
     begin
         if (is_fireboy && fireboy_data != 8'h00) begin
-            Red = palette[fireboy_data[5:0]][23:16];
-            Green = palette[fireboy_data[5:0]][15:8];
-            Blue = palette[fireboy_data[5:0]][7:0];
+            Red = palette[fireboy_data[6:0]][23:16];
+            Green = palette[fireboy_data[6:0]][15:8];
+            Blue = palette[fireboy_data[6:0]][7:0];
         end
         else if (is_icegirl && icegirl_data != 8'h00) begin
-            Red = palette[icegirl_data[5:0]][23:16];
-            Green = palette[icegirl_data[5:0]][15:8];
-            Blue = palette[icegirl_data[5:0]][7:0];
+            Red = palette[icegirl_data[6:0]][23:16];
+            Green = palette[icegirl_data[6:0]][15:8];
+            Blue = palette[icegirl_data[6:0]][7:0];
         end
         else if (is_score && score_data != 8'h00) begin
-            Red = palette[score_data[5:0]][23:16];
-            Green = palette[score_data[5:0]][15:8];
-            Blue = palette[score_data[5:0]][7:0];
+            Red = palette[score_data[6:0]][23:16];
+            Green = palette[score_data[6:0]][15:8];
+            Blue = palette[score_data[6:0]][7:0];
         end
         else if (is_gem && gem_data != 8'h00) begin
-            Red = palette[gem_data[5:0]][23:16];
-            Green = palette[gem_data[5:0]][15:8];
-            Blue = palette[gem_data[5:0]][7:0];
+            Red = palette[gem_data[6:0]][23:16];
+            Green = palette[gem_data[6:0]][15:8];
+            Blue = palette[gem_data[6:0]][7:0];
+        end
+        else if (is_elevator && elevator_data != 8'h00) begin
+            Red = palette[elevator_data[6:0]][23:16];
+            Green = palette[elevator_data[6:0]][15:8];
+            Blue = palette[elevator_data[6:0]][7:0];
+        end
+        else if (is_switch && switch_data != 8'h00) begin
+            Red = palette[switch_data[6:0]][23:16];
+            Green = palette[switch_data[6:0]][15:8];
+            Blue = palette[switch_data[6:0]][7:0];
         end
         else begin
-            Red = palette[bg_data[5:0]][23:16];
-            Green = palette[bg_data[5:0]][15:8];
-            Blue = palette[bg_data[5:0]][7:0];
+            Red = palette[bg_data[6:0]][23:16];
+            Green = palette[bg_data[6:0]][15:8];
+            Blue = palette[bg_data[6:0]][7:0];
         end
     end 
     
