@@ -17,7 +17,7 @@ module ElevatorController (
 );
     
     parameter elevator_count = 2;
-    parameter shortint elevator_start_pos [elevator_count][2] = '{'{23,550}, '{256,192}};
+    parameter shortint elevator_start_pos [elevator_count][2] = '{'{23,550}, '{252,192}};
     parameter shortint elevator_end_pos [elevator_count][2] = '{'{23,550}, '{303,249}};
     parameter shortint elevator_minmax_y_pos [elevator_count][2] = '{'{208,119}, '{335,272}};
 
@@ -34,8 +34,8 @@ module ElevatorController (
     logic is_switchs [elevator_count-1:0];
     logic [7:0] switchs_data [elevator_count-1:0];
 
-    logic is_collide_player1_in [elevator_count-1:0];
-    logic is_collide_player2_in [elevator_count-1:0];
+    logic is_collide_player1_in [elevator_count];
+    logic is_collide_player2_in [elevator_count];
     shortint player1_X_Min_in [elevator_count];
     shortint player1_X_Max_in [elevator_count];
     shortint player1_Y_Min_in [elevator_count];

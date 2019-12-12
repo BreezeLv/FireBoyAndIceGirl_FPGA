@@ -153,6 +153,6 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     
     // Display keycode on hex display
     HexDriver hex_inst_0 (score_hex, HEX0);
-    HexDriver hex_inst_1 ({3'b0,is_collide_player1}, HEX1);
+    HexDriver hex_inst_1 ({3'b110,is_collide_player1}, HEX1);
     
 endmodule
