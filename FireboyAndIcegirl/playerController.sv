@@ -115,11 +115,11 @@ begin
         // Jump
         // make fireboy always pulling by gravity, and falling as much as possible
         // (think about the case when fireboy falling from an edge of a platform..)
+		  gravity_counter_in = gravity_counter + 1;
         if(gravity_counter == gravity_frame_rate_divider) begin
             gravity_counter_in = 0;
             fireboy_Y_Motion_in = fireboy_Y_Motion + fireboy_gravity; // add a divisor to gravitiy..
         end
-        gravity_counter_in = gravity_counter + 1;
         if(fireboy_jump && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded_in=1'b0; end
         
     
@@ -365,11 +365,11 @@ begin
         // Jump
         // make icegirl always pulling by gravity, and falling as much as possible
         // (think about the case when icegirl falling from an edge of a platform..)
+		  gravity_counter_in = gravity_counter + 1;
         if(gravity_counter == gravity_frame_rate_divider) begin
             gravity_counter_in = 0;
             icegirl_Y_Motion_in = icegirl_Y_Motion + icegirl_gravity; // add a divisor to gravitiy..
         end
-        gravity_counter_in = gravity_counter + 1;
         if(icegirl_jump && is_grounded) begin icegirl_Y_Motion_in = icegirl_jump_v0; is_grounded_in=1'b0; end
         
     
