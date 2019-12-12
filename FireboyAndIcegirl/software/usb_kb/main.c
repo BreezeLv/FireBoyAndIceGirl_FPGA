@@ -594,6 +594,7 @@ int main(void)
 			case 0x28:
 			case 0x2c:
 				mask |= 0x80;
+				break;
 
 			default:
 				break;

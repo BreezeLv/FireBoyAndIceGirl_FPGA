@@ -7,8 +7,9 @@ module WaterController (
 );
     
     parameter water_count = 3;
-    parameter shortint water_pos [water_count][2] = '{'{296,424,392}, '{463,463,366}};
-    parameter [2:0] water_types [water_count] = '{3'd0,3'd1,3'd2};
+    parameter shortint water_pos_x [water_count-1:0] = '{296,424,392};
+	 parameter shortint water_pos_y [water_count-1:0] = '{463,463,366};
+    parameter logic [2:0] water_types [water_count-1:0] = '{3'd0,3'd1,3'd2};
 
     logic player1_deads [water_count-1:0];
     logic player2_deads [water_count-1:0];
@@ -26,7 +27,7 @@ module WaterController (
         end
     end
 
-    water water_list [water_count-1:0] (.*, .water_type(water_types), .water_X_Pos(water_pos[0]) ,.water_Y_Pos(water_pos[1]),
+    Water water_list [water_count-1:0] (.*, .water_type(water_types), .water_X_Pos(water_pos_x) ,.water_Y_Pos(water_pos_y),
      .player1_dead(player1_deads), .player2_dead(player2_deads));
 
 endmodule
