@@ -18,7 +18,7 @@ module ElevatorController (
     
     parameter elevator_count = 2;
     parameter shortint elevator_start_pos [elevator_count][2] = '{'{23,550}, '{256,192}};
-    parameter shortint elevator_end_pos [elevator_count][2] = '{'{23,550}, '{303,256}};
+    parameter shortint elevator_end_pos [elevator_count][2] = '{'{23,550}, '{303,249}};
     parameter shortint elevator_minmax_y_pos [elevator_count][2] = '{'{208,119}, '{335,272}};
 
     // parameter shortint switch_count [elevator_count] = '{2,2};
@@ -134,9 +134,7 @@ endmodule
 
 
 
-module Elevator #(
-    shortint switch_count
-    ) (
+module Elevator #(shortint switch_count) (
     input Clk, frame_clk, Reset,
     input [9:0] DrawX, DrawY,
     input shortint player1_top, player1_bottom, player1_left, player1_right,
@@ -158,10 +156,6 @@ module Elevator #(
 );
     parameter elevator_width = 64;
     parameter elevator_height = 16;
-    // parameter elevator_Start_Pos_X = 23;
-    // parameter elevator_Start_Pos_Y = 256;
-    // parameter elevator_End_Pos_X = 23;
-    // parameter elevator_End_Pos_Y = 303;
 
     parameter shortint elevator_max_velocity = 1;
     parameter shortint elevator_collider_max_x_range = 80;
@@ -188,7 +182,7 @@ module Elevator #(
         if(Reset) begin
             elevator_Pos_X <= elevator_Start_Pos_X;
             elevator_Pos_Y <= elevator_Start_Pos_Y;
-            stable <= 1'b0;
+            stable <= 1'b1;
             frame_counter <= 2'b00;
             on <= 1'b0;
         end
@@ -225,12 +219,14 @@ module Elevator #(
 
                 // Elevator Movement
                 if(on) begin
+							if(stable && elevator_Pos_Y != elevator_End_Pos_Y) stable_in=1'b0;
                     if(!stable) begin
                         if(elevator_Pos_Y_in == elevator_End_Pos_Y) stable_in=1'b1;
                         else elevator_Pos_Y_in += elevator_max_velocity;
                     end
                 end
                 else begin
+							if(stable && elevator_Pos_Y != elevator_Start_Pos_Y) stable_in=1'b0;
                     if(!stable) begin
                         if(elevator_Pos_Y_in == elevator_Start_Pos_Y) stable_in=1'b1;
                         else elevator_Pos_Y_in -= elevator_max_velocity;
@@ -310,7 +306,7 @@ module Elevator #(
         is_switch = 1'b0;
         switch_read_addr = 9'h00;
         switch_data = 8'h00;
-        on_in = on;
+        on_in = 1'b0;
 
         for (int i = 0; i < switch_count ; i++) begin
             if(switchs_on[i]) on_in=1'b1;
