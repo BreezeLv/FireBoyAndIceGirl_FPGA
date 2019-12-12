@@ -5,7 +5,7 @@ module ScoreController (
     input shortint player2_top, player2_bottom, player2_left, player2_right,
     output logic is_score, is_gem,
     output logic [7:0] score_data, gem_data,
-	 output logic [3:0] score_hex
+    output logic [3:0] score_hex
 );
 
     parameter gem_count = 2;

@@ -116,7 +116,7 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
 
     // Control signals
     logic revive;
-    GameController GameController_inst(.*, .Reset(Reset_h), .gameover(1'b0), .gamewin(1'b0));
+    GameController GameController_inst(.*, .Reset(Reset_h), .gameover(player1_dead|player2_dead), .gamewin(1'b0));
 
     // Background Control
     logic [7:0] bg_data;
@@ -130,6 +130,7 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     
     // Multiple Key Press Buffer/Middler
     logic fireboy_jump, fireboy_left, fireboy_right, icegirl_jump, icegirl_left, icegirl_right;
+    logic confirm;
     KeycodeMapper keycodeMapper_inst(.*);
 
     // Score Display
@@ -147,6 +148,10 @@ module FireboyAndIcegirl_toplevel( input               CLOCK_50,
     logic is_elevator, is_switch;
     logic [7:0] elevator_data, switch_data;
     ElevatorController ElevatorController_inst(.*, .frame_clk(~VGA_VS), .Reset(revive));
+
+    // Water Control
+    logic player1_dead, player2_dead;
+    WaterController WaterController_inst(.*, .Reset(revive));
 
     // Sprite Renderer
     color_mapper color_instance(.*);

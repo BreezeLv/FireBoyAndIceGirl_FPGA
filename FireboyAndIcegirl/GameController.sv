@@ -1,6 +1,7 @@
 module GameController(
     input Clk, Reset,
     input logic gameover, gamewin,
+    input logic confirm,
 
     output logic revive
 );
@@ -23,8 +24,10 @@ always_comb begin
         InGame: 
             if(gameover) next_state = GameOver;
             else if(gamewin) next_state = GamePass;
-        // GameOver: next_state = StartMenu;
-        // GamePass: next_state = StartMenu;
+        GameOver:
+            if(confirm) next_state = StartMenu;
+        GamePass:
+            if(confirm) next_state = StartMenu;
         default: ;
     endcase
 end

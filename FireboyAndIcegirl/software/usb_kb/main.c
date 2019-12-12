@@ -590,6 +590,11 @@ int main(void)
 				if(!(mask&0x02)) mask |= 0x01;
 				break;
 
+			// Enter/Space Press Check
+			case 0x28:
+			case 0x2c:
+				mask |= 0x80;
+
 			default:
 				break;
 			}

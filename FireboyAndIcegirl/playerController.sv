@@ -8,6 +8,7 @@ module FireBoy (
 	input logic fireboy_jump, fireboy_left, fireboy_right,
     input logic is_collide_player1,
     input shortint player1_X_Min, player1_X_Max, player1_Y_Min, player1_Y_Max,
+    input logic player1_dead,
 
     output logic is_fireboy,
 	output logic [7:0] fireboy_data,
@@ -101,7 +102,7 @@ begin
     else if(fireboy_right) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
 
     // Update position and motion only at rising edge of frame clock
-    if (frame_clk_rising_edge)
+    if (frame_clk_rising_edge && !player1_dead)
     begin
 
         /* ---- Player Movement Logics ---- */
@@ -249,6 +250,7 @@ module IceGirl (
 	input logic icegirl_jump, icegirl_left, icegirl_right,
     input logic is_collide_player2,
     input shortint player2_X_Min, player2_X_Max, player2_Y_Min, player2_Y_Max,
+    input logic player2_dead,
 
     output logic is_icegirl,
 	output logic [7:0] icegirl_data,
@@ -342,7 +344,7 @@ begin
     else if(icegirl_right) begin icegirl_X_Motion_in = icegirl_max_velocity_X; end
 
     // Update position and motion only at rising edge of frame clock
-    if (frame_clk_rising_edge)
+    if (frame_clk_rising_edge && !player2_dead)
     begin
 
         /* ---- Player Movement Logics ---- */
