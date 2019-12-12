@@ -18,7 +18,7 @@ module ElevatorController (
     
     parameter elevator_count = 2;
     parameter shortint elevator_start_pos [elevator_count][2] = '{'{23,550}, '{252,192}};
-    parameter shortint elevator_end_pos [elevator_count][2] = '{'{23,550}, '{303,249}};
+    parameter shortint elevator_end_pos [elevator_count][2] = '{'{23,550}, '{308,249}};
     parameter shortint elevator_minmax_y_pos [elevator_count][2] = '{'{208,119}, '{335,272}};
 
     // parameter shortint switch_count [elevator_count] = '{2,2};

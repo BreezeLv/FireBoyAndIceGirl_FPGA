@@ -438,7 +438,7 @@ module Collider (
                     player_Y_Max = 374;
                 end
                 else if(player_Y_Pos >= 193) begin
-                    player_Y_Min = 208;
+                    player_Y_Min = 195;
                     player_Y_Max = 272;
                 end
                 else if(player_Y_Pos >= 109) begin
