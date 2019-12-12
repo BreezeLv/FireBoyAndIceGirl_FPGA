@@ -59,7 +59,7 @@ assign player1_left = fireboy_X_Pos + 4;
 assign player1_right = fireboy_X_Pos + fireboy_width - 4;
 
 //Winning Condition
-assign player1_win = player1_right > fireboy_end_pos_X-exit_radius && player1_left < fireboy_end_pos_X+exit_radius && player1_bottom > fireboy_end_pos_Y-exit_radius && player1_top < fireboy_end_pos_Y+exit_radius;
+assign player1_win = (player1_right > fireboy_end_pos_X-exit_radius && player1_left < fireboy_end_pos_X+exit_radius && player1_bottom > fireboy_end_pos_Y-exit_radius && player1_top < fireboy_end_pos_Y+exit_radius);
 
 // Detect rising edge of frame_clk
 logic frame_clk_delayed, frame_clk_rising_edge;
@@ -317,7 +317,7 @@ assign player2_left = icegirl_X_Pos + 13;
 assign player2_right = icegirl_X_Pos + icegirl_width - 13;
 
 //Winning Condition
-assign player2_win = player2_right > icegirl_end_pos_X-exit_radius && player2_left < icegirl_end_pos_X+exit_radius && player2_bottom > icegirl_end_pos_Y-exit_radius && player2_top < icegirl_end_pos_Y+exit_radius;
+assign player2_win = (player2_right > icegirl_end_pos_X-exit_radius && player2_left < icegirl_end_pos_X+exit_radius && player2_bottom > icegirl_end_pos_Y-exit_radius && player2_top < icegirl_end_pos_Y+exit_radius);
 
 // Detect rising edge of frame_clk
 logic frame_clk_delayed, frame_clk_rising_edge;
