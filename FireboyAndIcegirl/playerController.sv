@@ -28,6 +28,8 @@ parameter shortint fireboy_gravity = 1;
 parameter [2:0] fireboy_idle_frame_size = 3'd4;
 parameter [1:0] fireboy_idle_frame_duration = 2'd3;
 
+parameter byte gravity_frame_rate_divider = 5;
+
 // Movement variables
 shortint fireboy_X_Pos, fireboy_X_Motion, fireboy_Y_Pos, fireboy_Y_Motion;
 shortint fireboy_X_Pos_in, fireboy_X_Motion_in, fireboy_Y_Pos_in, fireboy_Y_Motion_in;
@@ -38,6 +40,7 @@ Collider fireboy_collider_inst(.player_X_Pos(fireboy_X_Pos), .player_Y_Pos(fireb
 
 // jump variables
 logic is_grounded, is_grounded_in;
+byte gravity_counter, gravity_counter_in;
 
 // Animation variables
 logic [2:0] frame_index, frame_index_in;
@@ -70,6 +73,7 @@ begin
         frame_counter <= 2'b00;
         anim_type <= Idle;
         is_grounded <= 1'b1;
+        gravity_counter <= 0;
     end
     else
     begin
@@ -81,6 +85,7 @@ begin
         frame_counter <= frame_counter_in;
         anim_type <= anim_type_in;
         is_grounded <= is_grounded_in;
+        gravity_counter <= gravity_counter_in;
     end
 end
 
@@ -96,24 +101,25 @@ begin
 	frame_counter_in = frame_counter;
     anim_type_in = anim_type;
     is_grounded_in = is_grounded;
+    gravity_counter_in = gravity_counter;
 
+    //keybaord interrput
+    if(fireboy_left && !player1_dead) begin fireboy_X_Motion_in = (~(fireboy_max_velocity_X) + 1'b1); end
+    else if(fireboy_right && !player1_dead) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
 
     // Update position and motion only at rising edge of frame clock
     if (frame_clk_rising_edge && !player1_dead)
     begin
 
-        //keybaord interrput
-        if(fireboy_left) begin fireboy_X_Motion_in = (~(fireboy_max_velocity_X) + 1'b1); end
-        else if(fireboy_right) begin fireboy_X_Motion_in = fireboy_max_velocity_X; end
-
-
         /* ---- Player Movement Logics ---- */
         // Jump
         // make fireboy always pulling by gravity, and falling as much as possible
         // (think about the case when fireboy falling from an edge of a platform..)
-        if(frame_counter == 2'd3) begin
+        if(gravity_counter == gravity_frame_rate_divider) begin
+            gravity_counter_in = 0;
             fireboy_Y_Motion_in = fireboy_Y_Motion + fireboy_gravity; // add a divisor to gravitiy..
         end
+        gravity_counter_in = gravity_counter + 1;
         if(fireboy_jump && is_grounded) begin fireboy_Y_Motion_in = fireboy_jump_v0; is_grounded_in=1'b0; end
         
     
@@ -272,6 +278,8 @@ parameter shortint icegirl_gravity = 1;
 parameter [2:0] icegirl_idle_frame_size = 3'd4;
 parameter [1:0] icegirl_idle_frame_duration = 2'd3;
 
+parameter byte gravity_frame_rate_divider = 5;
+
 // Movement variables
 shortint icegirl_X_Pos, icegirl_X_Motion, icegirl_Y_Pos, icegirl_Y_Motion;
 shortint icegirl_X_Pos_in, icegirl_X_Motion_in, icegirl_Y_Pos_in, icegirl_Y_Motion_in;
@@ -282,6 +290,7 @@ Collider icegirl_collider_inst(.player_X_Pos(icegirl_X_Pos), .player_Y_Pos(icegi
 
 // Jump variables
 logic is_grounded, is_grounded_in;
+byte gravity_counter, gravity_counter_in;
 
 // Animation variables
 logic [2:0] frame_index, frame_index_in;
@@ -314,6 +323,7 @@ begin
         frame_counter <= 2'b00;
         anim_type <= Idle;
         is_grounded <= 1'b1;
+        gravity_counter <= 0;
     end
     else
     begin
@@ -325,6 +335,7 @@ begin
         frame_counter <= frame_counter_in;
         anim_type <= anim_type_in;
         is_grounded <= is_grounded_in;
+        gravity_counter <= gravity_counter_in;
     end
 end
 
@@ -340,23 +351,25 @@ begin
 	frame_counter_in = frame_counter;
     anim_type_in = anim_type;
     is_grounded_in = is_grounded;
+    gravity_counter_in = gravity_counter;
 
+    //keybaord interrput
+    if(icegirl_left && !player2_dead) begin icegirl_X_Motion_in = (~(icegirl_max_velocity_X) + 1'b1); end
+    else if(icegirl_right && !player2_dead) begin icegirl_X_Motion_in = icegirl_max_velocity_X; end
 
     // Update position and motion only at rising edge of frame clock
     if (frame_clk_rising_edge && !player2_dead)
     begin
 
-        //keybaord interrput
-        if(icegirl_left) begin icegirl_X_Motion_in = (~(icegirl_max_velocity_X) + 1'b1); end
-        else if(icegirl_right) begin icegirl_X_Motion_in = icegirl_max_velocity_X; end
-
         /* ---- Player Movement Logics ---- */
         // Jump
         // make icegirl always pulling by gravity, and falling as much as possible
         // (think about the case when icegirl falling from an edge of a platform..)
-        if(frame_counter == 2'd3) begin
+        if(gravity_counter == gravity_frame_rate_divider) begin
+            gravity_counter_in = 0;
             icegirl_Y_Motion_in = icegirl_Y_Motion + icegirl_gravity; // add a divisor to gravitiy..
         end
+        gravity_counter_in = gravity_counter + 1;
         if(icegirl_jump && is_grounded) begin icegirl_Y_Motion_in = icegirl_jump_v0; is_grounded_in=1'b0; end
         
     
