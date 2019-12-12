@@ -1,8 +1,8 @@
 // Just show a possible solution for flexible switch count for every elevator..
-typedef struct #(switch_count) {
-    shortint switch_X_Pos [switch_count];
-    shortint switch_Y_Pos [switch_count];
-} switch_pack;
+//typedef struct #(parameter switch_count) { //syntax error lol
+//    shortint switch_X_Pos [switch_count];
+//    shortint switch_Y_Pos [switch_count];
+//} switch_pack;
 
 module ElevatorController (
     input Clk, frame_clk, Reset,
@@ -29,20 +29,30 @@ module ElevatorController (
     logic is_elevators [elevator_count-1:0];
     logic [9:0] elevators_read_addr [elevator_count-1:0];
     logic elevators_on [elevator_count-1:0];
+	 logic elevator_on;
 
     logic is_switchs [elevator_count-1:0];
-    logic switchs_data [elevator_count-1:0];
+    logic [7:0] switchs_data [elevator_count-1:0];
 
     logic is_collide_player1_in [elevator_count-1:0];
     logic is_collide_player2_in [elevator_count-1:0];
-    shortint player1_X_Min_in, player1_X_Max_in, player1_Y_Min_in, player1_Y_Max_in [elevator_count-1:0];
-    shortint player2_X_Min_in, player2_X_Max_in, player2_Y_Min_in, player2_Y_Max_in [elevator_count-1:0];
+		shortint player1_X_Min_in [elevator_count];
+		shortint player1_X_Max_in [elevator_count];
+		shortint player1_Y_Min_in [elevator_count];
+		shortint player1_Y_Max_in [elevator_count];
+		shortint player2_X_Min_in [elevator_count];
+		shortint player2_X_Max_in [elevator_count];
+		shortint player2_Y_Min_in [elevator_count];
+		shortint player2_Y_Max_in [elevator_count];
+//    shortint player1_X_Min_in, player1_X_Max_in, player1_Y_Min_in, player1_Y_Max_in [elevator_count-1:0];
+//    shortint player2_X_Min_in, player2_X_Max_in, player2_Y_Min_in, player2_Y_Max_in [elevator_count-1:0];
 
     always_comb begin
 
         is_elevator = 1'b0;
         elevator_read_addr = 9'h00;
         elevator_data = 8'h00;
+		  elevator_on = 1'b0;
 
         is_collide_player1=1'b0;
         is_collide_player2=1'b0;
@@ -62,8 +72,9 @@ module ElevatorController (
         for (int i = 0; i < elevator_count ; i++) begin
             if(is_elevators[i]) begin
                 is_elevator = 1'b1;
+					 elevator_on = elevators_on[i];
                 elevator_read_addr = elevators_read_addr[i];
-                elevator_data = elevator_data_buf + elevators_on[i];
+                elevator_data = elevator_data_buf;
             end
 
             if(is_collide_player1_in[i]) begin
@@ -89,17 +100,23 @@ module ElevatorController (
         end
     end
 
-    Elevator #( .elevator_collider_min_y(elevator_minmax_y_pos[0]),
-                .elevator_collider_max_y(elevator_minmax_y_pos[1]),
-                .elevator_Start_Pos_X(elevator_start_pos[0]),
-                .elevator_Start_Pos_Y(elevator_start_pos[1]),
-                .elevator_End_Pos_X(elevator_end_pos[0]),
-                .elevator_End_Pos_Y(elevator_end_pos[1]),
+    Elevator #( 
                 .switch_count(max_switch_count)) elevator_list [elevator_count-1:0] ( .*,
+																									 .elevator_collider_min_y(elevator_minmax_y_pos[0]),
+																									 .elevator_collider_max_y(elevator_minmax_y_pos[1]),
+																									 .elevator_Start_Pos_X(elevator_start_pos[0]),
+																									 .elevator_Start_Pos_Y(elevator_start_pos[1]),
+																									 .elevator_End_Pos_X(elevator_end_pos[0]),
+																									 .elevator_End_Pos_Y(elevator_end_pos[1]),
                                                                             .is_elevator(is_elevators),
                                                                             .elevator_on(elevators_on),
+																									 .elevator_read_addr(elevators_read_addr),
                                                                             .is_switch(is_switchs),
                                                                             .switch_data(switchs_data),
+																									 .is_collide_player1(is_collide_player1_in),
+																									 .is_collide_player2(is_collide_player2_in),
+																									 .switch_X_Pos(switch_X_Pos),
+																									 .switch_Y_Pos(switch_Y_Pos),
                                                                             .player1_X_Min(player1_X_Min_in),
                                                                             .player1_X_Max(player1_X_Max_in),
                                                                             .player1_Y_Min(player1_Y_Min_in),
@@ -114,25 +131,25 @@ module ElevatorController (
     logic [9:0] elevator_read_addr;
     logic [7:0] elevator_data_buf;
 
-    ElevatorROM ElevatorROM_inst(.*, .elevator_data_out(elevator_data_buf)); // Global elevatorRom Instance, can be shared assume no overlapping elevators
+    Elevator_ROM ElevatorROM_inst(.*, .on(elevator_on), .elevator_data_out(elevator_data_buf)); // Global elevatorRom Instance, can be shared assume no overlapping elevators
 
 endmodule
 
 
 
 module Elevator #(
-    elevator_collider_min_y,
-    elevator_collider_max_y,
-    elevator_Start_Pos_X,
-    elevator_Start_Pos_Y,
-    elevator_End_Pos_X,
-    elevator_End_Pos_Y,
-    switch_count
+    shortint switch_count
     ) (
     input Clk, frame_clk, Reset,
     input [9:0] DrawX, DrawY,
     input shortint player1_top, player1_bottom, player1_left, player1_right,
     input shortint player2_top, player2_bottom, player2_left, player2_right,
+	 input shortint elevator_collider_min_y,
+    input shortint elevator_collider_max_y,
+    input shortint elevator_Start_Pos_X,
+    input shortint elevator_Start_Pos_Y,
+    input shortint elevator_End_Pos_X,
+    input shortint elevator_End_Pos_Y,
     input shortint switch_X_Pos[switch_count], switch_Y_Pos[switch_count],
     output is_elevator, is_switch,
     output [7:0] switch_data,
@@ -190,6 +207,17 @@ module Elevator #(
         elevator_Pos_Y_in = elevator_Pos_Y;
         stable_in = stable;
         frame_counter_in = frame_counter;
+		  
+		  player1_X_Min=0;
+        player1_X_Max=639;
+        player1_Y_Min=0;
+        player1_Y_Max=479;
+        player2_X_Min=0;
+        player2_X_Max=639;
+        player2_Y_Min=0;
+        player2_Y_Max=479;
+        is_collide_player1=1'b0;
+        is_collide_player2=1'b0;
 
         if (frame_clk_rising_edge) begin
 
@@ -216,16 +244,6 @@ module Elevator #(
             else frame_counter_in = frame_counter+2'd1;
 
             /* --- Calculate Elevator-Player Collision Logics --- */
-            player1_X_Min=0;
-            player1_X_Max=639;
-            player1_Y_Min=0;
-            player1_Y_Max=479;
-            player2_X_Min=0;
-            player2_X_Max=639;
-            player2_Y_Min=0;
-            player2_Y_Max=479;
-            is_collide_player1=1'b0;
-            is_collide_player2=1'b0;
 
             if(elevator_Pos_Y+elevator_height > player1_top && elevator_Pos_Y < player1_bottom && player1_right>=elevator_Pos_X-elevator_collider_max_x_range && player1_left<=elevator_Pos_X+elevator_width+elevator_collider_max_x_range) begin
                 is_collide_player1=1'b1;
@@ -359,8 +377,9 @@ module Elevator_Switch (
     parameter shortint switch_width = 32;
     parameter shortint switch_height = 12;
 
-    shortint switch_left = switch_X_Pos+8;
-    shortint switch_right = switch_X_Pos+switch_width-8;
+    shortint switch_left, switch_right;
+	 assign switch_left = switch_X_Pos+8;
+    assign switch_right = switch_X_Pos+switch_width-8;
 
     logic state_in;
 

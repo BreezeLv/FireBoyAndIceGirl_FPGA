@@ -589,4 +589,5 @@ set_global_assignment -name SYSTEMVERILOG_FILE Collider.sv
 set_global_assignment -name SYSTEMVERILOG_FILE KeycodeMapper.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ScoreController.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Font_ROM.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ElevatorController.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -367,10 +367,10 @@ begin
 		
         // Additional Collision Bounding from Elevators..
         if(is_collide_player2) begin
-           if(fireboy_X_Pos_in < player2_X_Min - 4) fireboy_X_Pos_in=player2_X_Min-4;
-            else if(fireboy_X_Pos_in + fireboy_width >= player2_X_Max+4) fireboy_X_Pos_in=player2_X_Max-fireboy_width-1+4;
-            if(fireboy_Y_Pos_in < player2_Y_Min) begin fireboy_Y_Pos_in=player2_Y_Min; fireboy_Y_Motion_in=0; end
-            else if(fireboy_Y_Pos_in + fireboy_height >= player2_Y_Max) begin fireboy_Y_Pos_in=player2_Y_Max-fireboy_height-1; is_grounded_in=1'b1; fireboy_Y_Motion_in=0; end 
+           if(icegirl_X_Pos_in < player2_X_Min - 4) icegirl_X_Pos_in=player2_X_Min-4;
+            else if(icegirl_X_Pos_in + icegirl_width >= player2_X_Max+4) icegirl_X_Pos_in=player2_X_Max-icegirl_width-1+4;
+            if(icegirl_Y_Pos_in < player2_Y_Min) begin icegirl_Y_Pos_in=player2_Y_Min; icegirl_Y_Motion_in=0; end
+            else if(icegirl_Y_Pos_in + icegirl_height >= player2_Y_Max) begin icegirl_Y_Pos_in=player2_Y_Max-icegirl_height-1; is_grounded_in=1'b1; icegirl_Y_Motion_in=0; end 
         end
 
         /* ---- Animation Logics ---- */
