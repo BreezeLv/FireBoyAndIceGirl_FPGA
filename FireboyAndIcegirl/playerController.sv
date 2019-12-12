@@ -27,7 +27,7 @@ parameter [9:0] fireboy_end_pos_X = 10'd544;
 parameter [9:0] fireboy_end_pos_Y = 10'd126;
 parameter shortint exit_radius = 16;
 
-parameter shortint fireboy_jump_v0 = -7; //initial velocity
+parameter shortint fireboy_jump_v0 = -4; //initial velocity
 parameter shortint fireboy_gravity = 1;
 
 parameter [2:0] fireboy_idle_frame_size = 3'd4;
@@ -285,7 +285,7 @@ parameter [9:0] icegirl_end_pos_X = 10'd544;
 parameter [9:0] icegirl_end_pos_Y = 10'd126;
 parameter shortint exit_radius = 16;
 
-parameter shortint icegirl_jump_v0 = -7; //initial velocity
+parameter shortint icegirl_jump_v0 = -4; //initial velocity
 parameter shortint icegirl_gravity = 1;
 
 parameter [2:0] icegirl_idle_frame_size = 3'd4;
@@ -317,7 +317,7 @@ assign player2_left = icegirl_X_Pos + 13;
 assign player2_right = icegirl_X_Pos + icegirl_width - 13;
 
 //Winning Condition
-assign player1_win = player1_right > icegirl_end_pos_X-exit_radius && player1_left < icegirl_end_pos_X+exit_radius && player1_bottom > icegirl_end_pos_Y-exit_radius && player1_top < icegirl_end_pos_Y+exit_radius;
+assign player2_win = player2_right > icegirl_end_pos_X-exit_radius && player2_left < icegirl_end_pos_X+exit_radius && player2_bottom > icegirl_end_pos_Y-exit_radius && player2_top < icegirl_end_pos_Y+exit_radius;
 
 // Detect rising edge of frame_clk
 logic frame_clk_delayed, frame_clk_rising_edge;
