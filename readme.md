@@ -6,6 +6,7 @@
 - [Description](#written-description)
 - [Module Break-down](#module-break-down)
 - [Resources Usage](#design-resources-and-statistics-table)
+- [Authors](#authors)
 - [License](#license)
 
 ## Introduction
@@ -468,6 +469,12 @@ This is the driver for 7-segment Hex LED display on board. Basically takes in a 
 | Static Power  | 105.82 mW  |
 | Dynamic Power  | 0.79 mW  |
 | Total Power  | 173.90 mW  |
+
+
+## Authors
+
+* **Bernard Lyu** - [BreezeLv](https://github.com/BreezeLv)
+* **Albert Wang** - [Albert](https://github.com/albert9904)
 
 
 ## License
